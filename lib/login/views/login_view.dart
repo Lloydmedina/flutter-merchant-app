@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:get/get.dart';
 import 'package:merchant/home/views/home_view.dart';
 import 'package:merchant/login/views/forgot_password_view.dart';
 import 'package:merchant/login/views/registration_view.dart';
@@ -159,9 +160,7 @@ class LoginViewState extends State<LoginView> {
             borderRadius: BorderRadius.all(Radius.circular(8))),
       ),
       onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return HomeView();
-        }));
+        Get.toNamed("/home");
       },
       child: Text(
         'LOGIN',
@@ -194,9 +193,7 @@ class LoginViewState extends State<LoginView> {
   Widget _forgotPassword() {
     return InkWell(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return ForgotPasswordView();
-        }));
+        Get.toNamed("/forgot_password");
       },
       child: Text(
         'Forgot Password?',

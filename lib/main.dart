@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
+import 'package:logger/logger.dart';
 import 'package:get/get.dart';
 import 'package:merchant/home/views/home_view.dart';
+import 'package:merchant/login/views/forgot_password_view.dart';
 import 'package:merchant/login/views/login_view.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -16,7 +19,7 @@ class MyApp extends StatefulWidget {
   }
 }
 
-class _MyAppState extends StatelessWidget {
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final box = GetStorage();
@@ -31,6 +34,7 @@ class _MyAppState extends StatelessWidget {
           },
         ),
         GetPage(name: "/home", page: () => HomeView()),
+        GetPage(name: "/forgot_password", page: () => ForgotPasswordView()),
       ],
       initialRoute: '/',
     );
