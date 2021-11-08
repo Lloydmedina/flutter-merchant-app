@@ -1,10 +1,12 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:merchant/more/views/edit_banner_view.dart';
-import 'package:merchant/more/views/edit_cuisine.dart';
-import 'package:merchant/more/views/edit_location_view.dart';
-import 'package:merchant/more/views/edit_store_hours_view.dart';
-import 'package:merchant/more/views/edit_store_name_view.dart';
+import 'package:passafood_merchant/screens/more/views/edit_banner_view.dart';
+import 'package:passafood_merchant/screens/more/views/edit_cuisine.dart';
+import 'package:passafood_merchant/screens/more/views/edit_location_view.dart';
+import 'package:passafood_merchant/screens/more/views/edit_store_hours_view.dart';
+import 'package:passafood_merchant/screens/more/views/edit_store_name_view.dart';
 
 class MoreView extends StatefulWidget {
   @override

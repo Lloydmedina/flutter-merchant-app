@@ -1,5 +1,7 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
-import 'package:merchant/login/views/set_new_password.dart';
+import 'package:passafood_merchant/screens/login/views/set_new_password.dart';
 
 class ForgotPasswordView extends StatefulWidget {
   @override

@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:merchant/staff/views/add_new_staff.dart';
-import 'package:merchant/staff/views/edit_staff.dart';
+import 'package:passafood_merchant/screens/staff/views/add_new_staff.dart';
+import 'package:passafood_merchant/screens/staff/views/edit_staff.dart';
 
 class StaffView extends StatefulWidget {
   @override

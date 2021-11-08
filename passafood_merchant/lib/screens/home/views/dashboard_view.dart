@@ -1,13 +1,13 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:merchant/active_orders/views/active_orders_view.dart';
-import 'package:merchant/earnings/views/earnings_view.dart';
-import 'package:merchant/more/views/more_view.dart';
-import 'package:merchant/preparation/views/preparation_view.dart';
-import 'package:merchant/review/views/review_view.dart';
-import 'package:merchant/staff/views/staff_view.dart';
-import 'package:merchant/support/views/support_view.dart';
+import 'package:passafood_merchant/screens/active_orders/views/active_orders_view.dart';
+import 'package:passafood_merchant/screens/earnings/views/earnings_view.dart';
+import 'package:passafood_merchant/screens/more/views/more_view.dart';
+import 'package:passafood_merchant/screens/preparation/views/preparation_view.dart';
+import 'package:passafood_merchant/screens/review/views/review_view.dart';
+import 'package:passafood_merchant/screens/staff/views/staff_view.dart';
+import 'package:passafood_merchant/screens/support/views/support_view.dart';
 
 class DashboardView extends StatefulWidget {
   @override

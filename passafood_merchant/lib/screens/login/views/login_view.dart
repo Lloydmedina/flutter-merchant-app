@@ -2,9 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:merchant/home/views/home_view.dart';
-import 'package:merchant/login/views/forgot_password_view.dart';
-import 'package:merchant/login/views/registration_view.dart';
+import 'package:passafood_merchant/screens/home/views/home_view.dart';
+import 'package:passafood_merchant/screens/login/views/forgot_password_view.dart';
+import 'package:passafood_merchant/screens/login/views/registration_view.dart';
 
 class LoginView extends StatefulWidget {
   @override

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:merchant/utils/custom_dialog.dart';
+import 'package:passafood_merchant/utils/custom_dialog.dart';
 
 class EditStaff extends StatefulWidget {
   @override

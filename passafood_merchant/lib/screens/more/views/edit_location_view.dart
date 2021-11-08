@@ -1,9 +1,9 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:merchant/utils/custom_location_picker.dart';
 
 class EditLocationView extends StatefulWidget {
   @override
@@ -11,7 +11,7 @@ class EditLocationView extends StatefulWidget {
 }
 
 class EditLocationViewState extends State<EditLocationView> {
-  Completer<GoogleMapController> _controller = Completer();
+  //Completer<GoogleMapController> _controller = Completer();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,19 +57,20 @@ class EditLocationViewState extends State<EditLocationView> {
       height: 150,
       child: Stack(
         children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 150,
-            child: GoogleMap(
-              zoomControlsEnabled: false,
-              onMapCreated: (GoogleMapController controller) {
-                _controller.complete(controller);
-              },
-              initialCameraPosition: CameraPosition(
-                  target: LatLng(10.324212359474148, 123.89850418003984),
-                  zoom: 18),
-            ),
-          ),
+//---------------------------------------------------------------goole map API
+          // Container(
+          //   width: MediaQuery.of(context).size.width,
+          //   height: 150,
+          //   child: GoogleMap(
+          //     zoomControlsEnabled: false,
+          //     onMapCreated: (GoogleMapController controller) {
+          //       _controller.complete(controller);
+          //     },
+          //     initialCameraPosition: CameraPosition(
+          //         target: LatLng(10.324212359474148, 123.89850418003984),
+          //         zoom: 18),
+          //   ),
+          // ),
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -110,11 +111,11 @@ class EditLocationViewState extends State<EditLocationView> {
             height: 8,
           ),
           InkWell(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return CustomLocationPicker();
-              }));
-            },
+            // onTap: () {
+            //   Navigator.push(context, MaterialPageRoute(builder: (context) {
+            //     return CustomLocationPicker();
+            //   }));
+            // },
             child: Text(
               'Change Address',
               style: TextStyle(

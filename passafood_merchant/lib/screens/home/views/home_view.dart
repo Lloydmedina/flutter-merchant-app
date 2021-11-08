@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:merchant/account/account_view.dart';
-import 'package:merchant/home/views/dashboard_view.dart';
+import 'package:passafood_merchant/screens/account/account_view.dart';
+import 'package:passafood_merchant/screens/home/views/dashboard_view.dart';
 
 class HomeView extends StatefulWidget {
   @override

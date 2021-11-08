@@ -1,6 +1,8 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:merchant/login/views/success_view.dart';
+import 'package:passafood_merchant/screens/login/views/success_view.dart';
 
 class RegistrationView extends StatefulWidget {
   @override

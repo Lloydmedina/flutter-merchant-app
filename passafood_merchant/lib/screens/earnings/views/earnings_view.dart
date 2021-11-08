@@ -1,6 +1,7 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:merchant/earnings/views/earnings_history_view.dart';
 
 class EarningsView extends StatefulWidget {
   @override
@@ -56,9 +57,10 @@ class EarningsViewState extends State<EarningsView> {
       child: InkWell(
         onTap: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return EarningsHistoryView();
+            return Text('earnings'); //EarningsHistoryView();
           }));
         },
+        // ignore: prefer_const_constructors
         child: Text(
           'History',
           style: TextStyle(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+//import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CustomLocationPicker extends StatefulWidget {
   // LocationPickers() : super();
@@ -14,7 +14,7 @@ class CustomLocationPickerState extends State<CustomLocationPicker> {
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: _appBar(),
-      body: _mapBody(),
+      //  body: _mapBody(),
       floatingActionButton: _save(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked);
 
@@ -41,25 +41,25 @@ class CustomLocationPickerState extends State<CustomLocationPicker> {
     );
   }
 
-  Widget _mapBody() {
-    return Stack(
-      children: [_mapView(), _mapPin(), _searchLocation()],
-    );
-  }
+  // Widget _mapBody() {
+  //   return Stack(
+  //     children: [_mapView(), _mapPin(), _searchLocation()],
+  //   );
+  // }
 
-  Widget _mapView() {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      child: GoogleMap(
-        zoomControlsEnabled: false,
-        onCameraMove: (CameraPosition position) {},
-        onCameraIdle: () async {},
-        initialCameraPosition: CameraPosition(
-            target: LatLng(10.324212359474148, 123.89850418003984), zoom: 18),
-      ),
-    );
-  }
+  // Widget _mapView() {
+  //   return Container(
+  //     height: MediaQuery.of(context).size.height,
+  //     width: MediaQuery.of(context).size.width,
+  //     child: GoogleMap(
+  //       zoomControlsEnabled: false,
+  //       onCameraMove: (CameraPosition position) {},
+  //       onCameraIdle: () async {},
+  //       initialCameraPosition: CameraPosition(
+  //           target: LatLng(10.324212359474148, 123.89850418003984), zoom: 18),
+  //     ),
+  //   );
+  // }
 
   Widget _mapPin() {
     return Center(

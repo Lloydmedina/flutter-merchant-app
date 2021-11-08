@@ -1,7 +1,7 @@
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:merchant/earnings/views/earnings_order_detail.dart';
+import 'package:passafood_merchant/screens/earnings/views/earnings_order_detail.dart';
 
 class EarningsHistoryView extends StatefulWidget {
   @override
