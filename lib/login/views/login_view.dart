@@ -18,7 +18,7 @@ class LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _loginForm(),
-      floatingActionButton: _termsAndService(),
+      // floatingActionButton: _termsAndService(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
@@ -44,7 +44,6 @@ class LoginViewState extends State<LoginView> {
             SizedBox(
               height: 23,
             ),
-            _signUp(),
             SizedBox(
               height: 23,
             ),
@@ -112,6 +111,7 @@ class LoginViewState extends State<LoginView> {
         borderRadius: BorderRadius.circular(4),
       ),
       child: TextFormField(
+        ///controller: Get,
         obscureText: obscureText,
         decoration: InputDecoration(
           suffixIcon: obscureText
@@ -171,25 +171,25 @@ class LoginViewState extends State<LoginView> {
     );
   }
 
-  Widget _signUp() {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return RegistrationView();
-            },
-          ),
-        );
-      },
-      child: Text(
-        'Be a partnered merchant Sign up now',
-        style: TextStyle(
-            color: Colors.black, fontWeight: FontWeight.w600, fontSize: 16),
-      ),
-    );
-  }
+  // Widget _signUp() {
+  //   return InkWell(
+  //     onTap: () {
+  //       Navigator.push(
+  //         context,
+  //         MaterialPageRoute(
+  //           builder: (context) {
+  //             return RegistrationView();
+  //           },
+  //         ),
+  //       );
+  //     },
+  //     child: Text(
+  //       'Be a partnered merchant Sign up now',
+  //       style: TextStyle(
+  //           color: Colors.black, fontWeight: FontWeight.w600, fontSize: 16),
+  //     ),
+  //   );
+  // }
 
   Widget _forgotPassword() {
     return InkWell(
@@ -208,33 +208,33 @@ class LoginViewState extends State<LoginView> {
     );
   }
 
-  Widget _termsAndService() {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: 'Terms of Service',
-              style: TextStyle(
-                color: Color(0xff007C89),
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            TextSpan(
-              text: ' and ',
-              style: TextStyle(
-                color: Colors.black,
-              ),
-            ),
-            TextSpan(
-              text: 'Privacy Policy',
-              style: TextStyle(
-                  color: Color(0xff007C89), fontWeight: FontWeight.w600),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget _termsAndService() {
+  //   return Align(
+  //     alignment: Alignment.bottomCenter,
+  //     child: RichText(
+  //       text: TextSpan(
+  //         children: [
+  //           TextSpan(
+  //             text: 'Terms of Service',
+  //             style: TextStyle(
+  //               color: Color(0xff007C89),
+  //               fontWeight: FontWeight.w600,
+  //             ),
+  //           ),
+  //           TextSpan(
+  //             text: ' and ',
+  //             style: TextStyle(
+  //               color: Colors.black,
+  //             ),
+  //           ),
+  //           TextSpan(
+  //             text: 'Privacy Policy',
+  //             style: TextStyle(
+  //                 color: Color(0xff007C89), fontWeight: FontWeight.w600),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 }
