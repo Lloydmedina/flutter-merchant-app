@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -22,8 +24,8 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _loginForm(),
-      floatingActionButton: _termsAndService(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      //floatingActionButton: _termsAndService(),
+      //floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
@@ -75,8 +77,9 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
           height: 11,
         ),
         Text(
-          'Rider',
-          style: TextStyle(color: Colors.black, fontSize: 14),
+          'Merchant',
+          style: TextStyle(
+              color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500),
         )
       ],
     );
@@ -95,14 +98,6 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
       ),
       child: Row(
         children: [
-          Text(
-            '+63',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-          ),
-          VerticalDivider(
-            thickness: 1,
-            color: Color(0xffEFEFF4),
-          ),
           Expanded(
             child: Container(
               height: 52,
@@ -122,7 +117,7 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
                   enabledBorder: InputBorder.none,
                   errorBorder: InputBorder.none,
                   disabledBorder: InputBorder.none,
-                  hintText: 'Enter mobile number',
+                  hintText: 'Enter email ',
                 ),
               ),
             ),
@@ -196,7 +191,7 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
       child: Text(
         'LOGIN',
         style: TextStyle(
-            color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+            color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
       ),
     );
   }
@@ -216,29 +211,29 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
     );
   }
 
-  Widget _termsAndService() {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: "Don't have an account yet?",
-              style: TextStyle(
-                color: Colors.black,
-              ),
-            ),
-            TextSpan(
-                text: ' Sign up',
-                style: TextStyle(
-                    color: Color(0xff007C89), fontWeight: FontWeight.w600),
-                recognizer: new TapGestureRecognizer()
-                  ..onTap = () => Get.toNamed("/sign_up_initial_checking")),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget _termsAndService() {
+  //   return Align(
+  //     alignment: Alignment.bottomCenter,
+  //     child: RichText(
+  //       text: TextSpan(
+  //         children: [
+  //           TextSpan(
+  //             text: "Don't have an account yet?",
+  //             style: TextStyle(
+  //               color: Colors.black,
+  //             ),
+  //           ),
+  //           TextSpan(
+  //               text: ' Sign up',
+  //               style: TextStyle(
+  //                   color: Color(0xff007C89), fontWeight: FontWeight.w600),
+  //               recognizer: new TapGestureRecognizer()
+  //                 ..onTap = () => Get.toNamed("/sign_up_initial_checking")),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   // void doLogin() async {
   //   await auth.signIn();
