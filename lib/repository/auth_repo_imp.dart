@@ -2,6 +2,11 @@ import 'dart:convert';
 
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
+import 'package:merchant/merchant/merchant_shared_pref_credential.dart';
+import 'package:merchant/model/init_response_parser.dart';
+import 'package:merchant/model/signin/sign_in_response.dart';
+import 'package:merchant/repository/auth_repo.dart';
+import 'package:merchant/utils/api_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepositoryImplementation extends AuthRepository {
@@ -39,8 +44,8 @@ class AuthRepositoryImplementation extends AuthRepository {
     String? rider_credential = prefs.getString("credential");
 
     if (rider_credential != null) {
-      RiderSharedPrefCredential credential =
-          RiderSharedPrefCredential.fromJson(jsonDecode(rider_credential));
+      MerchantSharedPrefCredential credential =
+          MerchantSharedPrefCredential.fromJson(jsonDecode(rider_credential));
       if (credential.userId != null) {
         value = credential.userId!;
       }
@@ -53,7 +58,7 @@ class AuthRepositoryImplementation extends AuthRepository {
   Future<SignInResponse>? signIn(data) async {
     try {
       client = http.Client();
-      final url = Uri.parse('${ACCOUNT_BASE_URL}/api/v1/rider/login');
+      final url = Uri.parse('${ACCOUNT_BASE_URL}/api/v1/merchant/user/login');
       final body = jsonEncode(data);
       final response = await client.post(url, headers: headers, body: body);
       final res = response.body;
@@ -83,8 +88,9 @@ class AuthRepositoryImplementation extends AuthRepository {
     final prefs = await SharedPreferences.getInstance();
     if (response.resultObject != null) {
       var res = response;
-      RiderSharedPrefCredential credential =
-          RiderSharedPrefCredential.fromJson(response.resultObject!.toJson());
+      MerchantSharedPrefCredential credential =
+          MerchantSharedPrefCredential.fromJson(
+              response.resultObject!.toJson());
 
       String user_credentials = jsonEncode(credential);
       prefs.setString("credential", user_credentials);

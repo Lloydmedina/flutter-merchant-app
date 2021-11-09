@@ -1,5 +1,7 @@
-import 'package:merchant/signin/sign_in.dart';
-import 'package:merchant/signin/sign_in_response.dart';
+import 'package:merchant/model/signin/sign_in.dart';
+import 'package:merchant/model/signin/sign_in_response.dart';
+//import 'package:merchant/signin/sign_in.dart';
+//import 'package:merchant/signin/sign_in_response.dart';
 
 abstract class AuthRepository {
   Future<bool> checkIsLogin();
