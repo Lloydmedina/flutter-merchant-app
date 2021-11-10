@@ -1,18 +1,29 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
+import 'package:merchant/controller/auth_controller.dart';
+import 'package:merchant/controller/loading_controller.dart';
 import 'package:merchant/home/views/home_view.dart';
 import 'package:merchant/login/views/forgot_password_view.dart';
 import 'package:merchant/login/views/registration_view.dart';
+import 'package:merchant/merchant/merchant_shared_pref_credential.dart';
+import 'package:merchant/utils/custom_dialog.dart';
+import 'package:merchant/utils/not_found.dart';
+import 'package:merchant/utils/unverified.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginView extends StatefulWidget {
   @override
   LoginViewState createState() => LoginViewState();
 }
 
-class LoginViewState extends State<LoginView> {
+class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
+  final auth = Get.find<AuthController>();
+  final LoadingController loading_controller = Get.find<LoadingController>();
   bool obscureText = true;
 
   @override
@@ -160,7 +171,8 @@ class LoginViewState extends State<LoginView> {
             borderRadius: BorderRadius.all(Radius.circular(8))),
       ),
       onPressed: () {
-        Get.toNamed("/home");
+        doLogin();
+        //Get.toNamed("/home");
       },
       child: Text(
         'LOGIN',
@@ -234,4 +246,72 @@ class LoginViewState extends State<LoginView> {
   //     ),
   //   );
   // }
+  void doLogin() async {
+    await auth.signIn();
+    Logger logger = new Logger();
+    final prefs = await SharedPreferences.getInstance();
+    String? merchant_credential = prefs.getString("credential");
+    MerchantSharedPrefCredential merch = new MerchantSharedPrefCredential();
+
+    if (merchant_credential != null) {
+      merch = MerchantSharedPrefCredential.fromJson(
+          jsonDecode(merchant_credential));
+    }
+    logger.i("SharedPref Data");
+    logger.i(merch);
+    logger.i(auth.sign_in_response.resultMessage);
+    logger.i(auth.sign_in_response.resultEnum);
+
+    if (auth.sign_in_response.resultMessage != null) {
+      if (auth.sign_in_response.resultMessage == "Success" &&
+          merch.accessToken != null) {
+        Get.offAllNamed("/");
+      } else if (auth.sign_in_response.resultMessage!.contains("not active")) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return CustomDialog(
+                enableCloseButton: true,
+                closeButtonText: "Close",
+                title: "Needs to be verified",
+                onPressedAgreeButton: () {},
+                content: unverifiedContent(),
+                onPressedCloseButton: () {
+                  Navigator.of(context, rootNavigator: true).pop();
+                },
+              );
+            });
+      } else {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return CustomDialog(
+                enableCloseButton: true,
+                closeButtonText: "Close",
+                title: "Message",
+                onPressedAgreeButton: () {},
+                content: nothingFoundContent(),
+                onPressedCloseButton: () {
+                  Navigator.of(context, rootNavigator: true).pop();
+                },
+              );
+            });
+      }
+    } else {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return CustomDialog(
+              enableCloseButton: true,
+              closeButtonText: "Close",
+              title: "Message",
+              onPressedAgreeButton: () {},
+              content: nothingFoundContent(),
+              onPressedCloseButton: () {
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            );
+          });
+    }
+  }
 }
