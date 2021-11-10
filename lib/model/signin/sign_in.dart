@@ -9,21 +9,23 @@ SignIn signInFromJson(String str) => SignIn.fromJson(json.decode(str));
 String signInToJson(SignIn data) => json.encode(data.toJson());
 
 class SignIn {
-  SignIn({
-    this.email,
-    this.password,
-  });
+  SignIn({this.email, this.password});
 
   String? email;
   String? password;
+  //bool? socialId;
 
   factory SignIn.fromJson(Map<String, dynamic> json) => SignIn(
-        email: json["mobileNumber"] == null ? null : json["mobileNumber"],
+        email: json["mobileEmailSocialId"] == null
+            ? null
+            : json["mobileEmailSocialId"],
         password: json["password"] == null ? null : json["password"],
+        //socialId: json["isSocial"] == null ? null : json["isSocial"],
       );
 
   Map<String, dynamic> toJson() => {
-        "mobileNumber": email == null ? null : email,
+        "mobileEmailSocialId": email == null ? null : email,
         "password": password == null ? null : password,
+        //"isSocial": socialId == null ? null : socialId,
       };
 }

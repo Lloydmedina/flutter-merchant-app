@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 import 'dart:ui';
 
@@ -7,9 +9,6 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:merchant/controller/auth_controller.dart';
 import 'package:merchant/controller/loading_controller.dart';
-import 'package:merchant/home/views/home_view.dart';
-import 'package:merchant/login/views/forgot_password_view.dart';
-import 'package:merchant/login/views/registration_view.dart';
 import 'package:merchant/merchant/merchant_shared_pref_credential.dart';
 import 'package:merchant/utils/custom_dialog.dart';
 import 'package:merchant/utils/not_found.dart';
@@ -27,6 +26,11 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
   bool obscureText = true;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _loginForm(),
@@ -38,31 +42,41 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
   Widget _loginForm() {
     return Center(
       child: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _headerIcon(),
-            SizedBox(
-              height: 16,
-            ),
-            _usernameField(),
-            _passwordField(),
-            SizedBox(
-              height: 16,
-            ),
-            _loginButton(),
-            SizedBox(
-              height: 23,
-            ),
-            SizedBox(
-              height: 23,
-            ),
-            _forgotPassword(),
-          ],
-        ),
-      ),
+          padding: EdgeInsets.all(16),
+          child: Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _headerIcon(),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  _usernameField(),
+                  _passwordField(),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  _loginButton(),
+                  SizedBox(
+                    height: 23,
+                  ),
+                  SizedBox(
+                    height: 23,
+                  ),
+                  _forgotPassword(),
+                ],
+              ),
+              Obx(() {
+                return loading_controller.isLoading.isTrue
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : Container();
+              }),
+            ],
+          )),
     );
   }
 
@@ -93,6 +107,7 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
         borderRadius: BorderRadius.circular(4),
       ),
       child: TextFormField(
+        controller: auth.sign_in_email,
         textInputAction: TextInputAction.next,
         keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
@@ -123,7 +138,7 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
         borderRadius: BorderRadius.circular(4),
       ),
       child: TextFormField(
-        ///controller: Get,
+        controller: auth.sign_in_password,
         obscureText: obscureText,
         decoration: InputDecoration(
           suffixIcon: obscureText
@@ -172,6 +187,7 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
       ),
       onPressed: () {
         doLogin();
+
         //Get.toNamed("/home");
       },
       child: Text(
@@ -263,7 +279,7 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
     logger.i(auth.sign_in_response.resultEnum);
 
     if (auth.sign_in_response.resultMessage != null) {
-      if (auth.sign_in_response.resultMessage == "Success" &&
+      if (auth.sign_in_response.resultEnum == "Success" &&
           merch.accessToken != null) {
         Get.offAllNamed("/");
       } else if (auth.sign_in_response.resultMessage!.contains("not active")) {

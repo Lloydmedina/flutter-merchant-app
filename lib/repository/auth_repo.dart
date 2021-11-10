@@ -1,3 +1,4 @@
+import 'package:merchant/model/signin/check_email_response.dart';
 import 'package:merchant/model/signin/sign_in.dart';
 import 'package:merchant/model/signin/sign_in_response.dart';
 //import 'package:merchant/signin/sign_in.dart';
@@ -18,7 +19,7 @@ abstract class AuthRepository {
   // Future<VerifyMobileEmailResponse> initialRegistrationConfirmCode(
   //     String mobile, String code);
   // Future<CheckMobileEmailResponse> registrationCheckEmailMobile(String mobile);
-  // Future<CheckMobileEmailResponse>? checkEmailMobile(String email_mobile);
+  // Future<CheckEmailResponse>? checkEmailMobile(String email_mobile);
 
   // Future<bool> parsedToken();
   // Future<bool> checkTokenExpirey();

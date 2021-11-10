@@ -1,9 +1,12 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
 import 'package:merchant/merchant/merchant_shared_pref_credential.dart';
 import 'package:merchant/model/init_response_parser.dart';
+import 'package:merchant/model/signin/check_email_response.dart';
 import 'package:merchant/model/signin/sign_in_response.dart';
 import 'package:merchant/repository/auth_repo.dart';
 import 'package:merchant/utils/api_config.dart';
@@ -19,6 +22,23 @@ class AuthRepositoryImplementation extends AuthRepository {
   final logger = Logger();
 
   AuthRepositoryImplementation() {}
+  @override
+  Future<CheckEmailResponse>? checkEmailMobile(String email_mobile) async {
+    try {
+      client = http.Client();
+      final url = Uri.parse(
+          '${ACCOUNT_BASE_URL}/api/v1/m-verify-account/${email_mobile}');
+
+      final response = await client.post(url, headers: headers);
+      final res = response.body;
+
+      client.close();
+      return CheckEmailResponse.fromJson(jsonDecode(res));
+    } on Exception catch (e) {
+      logger.e(e);
+      return CheckEmailResponse();
+    }
+  }
 
   @override
   Future<bool> checkIsLogin() async {
@@ -39,7 +59,7 @@ class AuthRepositoryImplementation extends AuthRepository {
   Future<String> extractData() async {
     String value = '';
     prefs = await SharedPreferences.getInstance();
-    prefs.getString("credentials");
+    prefs.getString("credential");
 
     String? rider_credential = prefs.getString("credential");
 
