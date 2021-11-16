@@ -6,6 +6,7 @@ import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
 import 'package:merchant/merchant/merchant_shared_pref_credential.dart';
 import 'package:merchant/model/init_response_parser.dart';
+import 'package:merchant/model/profile/Getmerchantuserinfo.dart';
 import 'package:merchant/model/signin/check_email_response.dart';
 import 'package:merchant/model/signin/sign_in_response.dart';
 import 'package:merchant/repository/auth_repo.dart';
@@ -123,6 +124,13 @@ class AuthRepositoryImplementation extends AuthRepository {
       String user_credentials = jsonEncode(credential);
       prefs.setString("credential", user_credentials);
     }
+  }
+
+  @override
+  Future<Getmerchantuserinfo>? getMerchantUserInfo(
+      Getmerchantuserinfo getmerchantuserinfo) {
+    // TODO: implement getMerchantUserInfo
+    throw UnimplementedError();
   }
 
   // @override
