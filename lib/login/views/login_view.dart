@@ -4,11 +4,14 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:logger/logger.dart';
 import 'package:merchant/controller/auth_controller.dart';
 import 'package:merchant/controller/loading_controller.dart';
+import 'package:merchant/controller/profile_controller.dart';
 import 'package:merchant/merchant/merchant_shared_pref_credential.dart';
 import 'package:merchant/utils/custom_dialog.dart';
 import 'package:merchant/utils/not_found.dart';
@@ -22,6 +25,8 @@ class LoginView extends StatefulWidget {
 
 class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
   final auth = Get.find<AuthController>();
+  final me = Get.find<ProfileController>();
+  MerchantSharedPrefCredential merch = new MerchantSharedPrefCredential();
   final LoadingController loading_controller = Get.find<LoadingController>();
   bool obscureText = true;
 
@@ -198,26 +203,6 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
     );
   }
 
-  // Widget _signUp() {
-  //   return InkWell(
-  //     onTap: () {
-  //       Navigator.push(
-  //         context,
-  //         MaterialPageRoute(
-  //           builder: (context) {
-  //             return RegistrationView();
-  //           },
-  //         ),
-  //       );
-  //     },
-  //     child: Text(
-  //       'Be a partnered merchant Sign up now',
-  //       style: TextStyle(
-  //           color: Colors.black, fontWeight: FontWeight.w600, fontSize: 16),
-  //     ),
-  //   );
-  // }
-
   Widget _forgotPassword() {
     return InkWell(
       onTap: () {
@@ -233,86 +218,40 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
     );
   }
 
-  // Widget _termsAndService() {
-  //   return Align(
-  //     alignment: Alignment.bottomCenter,
-  //     child: RichText(
-  //       text: TextSpan(
-  //         children: [
-  //           TextSpan(
-  //             text: 'Terms of Service',
-  //             style: TextStyle(
-  //               color: Color(0xff007C89),
-  //               fontWeight: FontWeight.w600,
-  //             ),
-  //           ),
-  //           TextSpan(
-  //             text: ' and ',
-  //             style: TextStyle(
-  //               color: Colors.black,
-  //             ),
-  //           ),
-  //           TextSpan(
-  //             text: 'Privacy Policy',
-  //             style: TextStyle(
-  //                 color: Color(0xff007C89), fontWeight: FontWeight.w600),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
   void doLogin() async {
     await auth.signIn();
     Logger logger = new Logger();
-    final prefs = await SharedPreferences.getInstance();
-    String? merchant_credential = prefs.getString("credential");
-    MerchantSharedPrefCredential merch = new MerchantSharedPrefCredential();
-
-    if (merchant_credential != null) {
-      merch = MerchantSharedPrefCredential.fromJson(
-          jsonDecode(merchant_credential));
-    }
+    final box = GetStorage();
+    String? merchant_credential = box.read("credential");
     logger.i("SharedPref Data");
     logger.i(merch);
     logger.i(auth.sign_in_response.resultMessage);
     logger.i(auth.sign_in_response.resultEnum);
+    logger.i(me.merchant_info.value.merchantId);
 
-    if (auth.sign_in_response.resultMessage != null) {
-      if (auth.sign_in_response.resultEnum == "Success" &&
-          merch.accessToken != null) {
-        Get.offAllNamed("/");
-      } else if (auth.sign_in_response.resultMessage!.contains("not active")) {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return CustomDialog(
-                enableCloseButton: true,
-                closeButtonText: "Close",
-                title: "Needs to be verified",
-                onPressedAgreeButton: () {},
-                content: unverifiedContent(),
-                onPressedCloseButton: () {
-                  Navigator.of(context, rootNavigator: true).pop();
-                },
-              );
-            });
+    if (auth.sign_in_response.resultEnum == "Success") {
+      Get.toNamed("/home");
+      if (merchant_credential != null) {
+        merch = MerchantSharedPrefCredential.fromJson(
+            jsonDecode(merchant_credential));
       } else {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return CustomDialog(
-                enableCloseButton: true,
-                closeButtonText: "Close",
-                title: "Message",
-                onPressedAgreeButton: () {},
-                content: nothingFoundContent(),
-                onPressedCloseButton: () {
-                  Navigator.of(context, rootNavigator: true).pop();
-                },
-              );
-            });
+        box.write("accessToken", merch.accessToken);
       }
+    } else if (auth.sign_in_response.resultMessage!.contains("not active")) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return CustomDialog(
+              enableCloseButton: true,
+              closeButtonText: "Close",
+              title: "Needs to be verified",
+              onPressedAgreeButton: () {},
+              content: unverifiedContent(),
+              onPressedCloseButton: () {
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            );
+          });
     } else {
       showDialog(
           context: context,

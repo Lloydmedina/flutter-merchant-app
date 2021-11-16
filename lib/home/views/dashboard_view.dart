@@ -24,36 +24,9 @@ class DashboardViewState extends State<DashboardView> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: _dashboardBody(),
-      appBar: _appBar(),
       floatingActionButton: _storeAvialability(),
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterDocked,
-    );
-  }
-
-  AppBar _appBar() {
-    return AppBar(
-      elevation: 0,
-      toolbarHeight: 64,
-      backgroundColor: Colors.white,
-      automaticallyImplyLeading: false,
-      title: Column(
-        children: [
-          Text(
-            'Restaurant Name',
-            style: TextStyle(
-                color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          Text(
-            'Store Location Address',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 12,
-            ),
-          ),
-        ],
-      ),
-      actions: [_buttonSwitch()],
     );
   }
 
@@ -62,143 +35,28 @@ class DashboardViewState extends State<DashboardView> {
       padding: EdgeInsets.all(16),
       child: Column(
         children: [
-          _earningsInfo(),
-          SizedBox(
-            height: 16,
-          ),
-          _services()
+          _services(),
         ],
       ),
     );
   }
 
-  Widget _buttonSwitch() {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: InkWell(
-        onTap: () {
-          _switchBranch(context);
-        },
-        child: Chip(
-          deleteIcon: Icon(
-            FeatherIcons.chevronDown,
-            color: Colors.black,
-          ),
-          onDeleted: () {},
-          label: Text(
-            'Switch',
-          ),
-          labelStyle: TextStyle(
-              color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
-        ),
-      ),
-    );
-  }
-
-  Widget _earningsInfo() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 206,
-      child: Center(
-        child: Card(
-          elevation: 1,
-          shadowColor: Colors.grey,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Container(
-            padding: EdgeInsets.only(top: 14, bottom: 14, left: 16, right: 16),
-            height: 184,
-            width: 343,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Earnings Today',
-                  style: TextStyle(fontSize: 12, color: Colors.black),
-                ),
-                Text(
-                  'PHP 12,000.00',
-                  style: TextStyle(
-                      fontSize: 32,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                _viewEarningsButton(),
-                SizedBox(
-                  height: 12,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      'Orders Completed Today',
-                      style: TextStyle(fontSize: 14, color: Colors.black),
-                    ),
-                    Text(
-                      ' 0',
-                      style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600),
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _viewEarningsButton() {
-    return InkWell(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return EarningsView();
-        }));
-      },
-      child: Container(
-        height: 36,
-        width: 151,
-        padding: EdgeInsets.only(left: 12, right: 12),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5), color: Color(0xffFFDE00)),
-        child: Row(
+  Widget _services() {
+    return Column(
+      children: [
+        Row(
           children: [
-            Text(
-              'View Earnings',
-              style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600),
-            ),
-            Icon(
-              FeatherIcons.chevronRight,
-              color: Colors.black,
-              size: 17,
-            )
+            _servicesButtons('Incoming Orders', FeatherIcons.shoppingBag, true),
+            _servicesButtons(
+                'Orders in Progress', FeatherIcons.clipboard, false),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _services() {
-    return Wrap(
-      alignment: WrapAlignment.spaceEvenly,
-      spacing: 25,
-      children: [
-        _servicesButtons('Oders', FeatherIcons.shoppingBag, true),
-        _servicesButtons('Menu', FeatherIcons.clipboard, false),
-        _servicesButtons('Staff', FeatherIcons.users, false),
-        _servicesButtons('Prep Time', FeatherIcons.clock, false),
-        _servicesButtons('Reviews', FeatherIcons.award, true),
-        _servicesButtons('Support', FeatherIcons.helpCircle, false),
-        _servicesButtons('More', FeatherIcons.moreHorizontal, false),
+        Row(
+          children: [
+            _servicesButtons('Order Ready', FeatherIcons.users, false),
+            _servicesButtons('Orders Complete', FeatherIcons.clock, false),
+          ],
+        ),
       ],
     );
   }
@@ -213,12 +71,12 @@ class DashboardViewState extends State<DashboardView> {
         _navigateServices(label);
       },
       child: Container(
-        width: 66,
+        width: 180,
         child: Column(
           children: [
             Container(
-              width: 66,
-              height: 66,
+              width: 400,
+              height: 100,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: Color(0xffEFEFF4), width: 1)),

@@ -28,9 +28,11 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final box = GetStorage();
-    if (box.hasData("accessToken")) {
-      // pr
-    }
+    // if (box.hasData("accessToken")) {
+    //   HomeView();
+    // } else {
+    //   LoginView();
+    // }
     return GetMaterialApp(
       title: 'Passafood Merchant Mobile',
       theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Poppins'),
