@@ -16,7 +16,7 @@ class AuthController {
   //ProfileController profile = new ProfileController();
 
 // login
-  // final sign_in_mobile_number = TextEditingController();
+  final sign_in_mobile_number = TextEditingController();
   final sign_in_email = TextEditingController();
   final sign_in_password = TextEditingController();
   bool socialId = false;
@@ -62,7 +62,7 @@ class AuthController {
     final box = GetStorage();
     box.write('accessToken', result?.resultObject?.accessToken);
     box.write('userId', result?.resultObject?.userId);
-    // print(box.read('token'));
+    print(box.read('token'));
 
     sign_in_response = result!;
     _loading.hideLoading();
@@ -96,15 +96,7 @@ class AuthController {
   //   _loading.hideLoading();
   // }
 
-  signOut() async {
-    // _loading.showLoading();
-
-    final box = GetStorage();
-    box.erase();
-    print(box.read('token'));
-    Get.toNamed("/login");
-    //_loading.hideLoading();
-  }
+  // signOut() async {}
 
   // checkEmailMobile() async {
   //   _loading.showLoading();
