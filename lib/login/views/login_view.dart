@@ -26,12 +26,20 @@ class LoginView extends StatefulWidget {
 class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
   final auth = Get.find<AuthController>();
   final me = Get.find<ProfileController>();
+<<<<<<< HEAD
+=======
+  final box = new GetStorage();
+>>>>>>> parent of 52c6e8a (profile binding)
   MerchantSharedPrefCredential merch = new MerchantSharedPrefCredential();
   final LoadingController loading_controller = Get.find<LoadingController>();
   bool obscureText = true;
 
   @override
   void initState() {
+<<<<<<< HEAD
+=======
+    autoLogin();
+>>>>>>> parent of 52c6e8a (profile binding)
     super.initState();
   }
 
@@ -234,6 +242,10 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
       if (merchant_credential != null) {
         merch = MerchantSharedPrefCredential.fromJson(
             jsonDecode(merchant_credential));
+<<<<<<< HEAD
+=======
+        box.write("accessToken", merch.accessToken);
+>>>>>>> parent of 52c6e8a (profile binding)
       } else {
         box.write("accessToken", merch.accessToken);
       }
@@ -269,4 +281,14 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
           });
     }
   }
+<<<<<<< HEAD
+=======
+
+  void autoLogin() async {
+    String isLogin = box.read("accessToken");
+    if (isLogin != null) {
+      Get.offAndToNamed('/home');
+    }
+  }
+>>>>>>> parent of 52c6e8a (profile binding)
 }
