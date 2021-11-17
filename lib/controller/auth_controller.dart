@@ -16,16 +16,15 @@ class AuthController {
   //ProfileController profile = new ProfileController();
 
 // login
-  final sign_in_mobile_number = TextEditingController();
+  // final sign_in_mobile_number = TextEditingController();
   final sign_in_email = TextEditingController();
   final sign_in_password = TextEditingController();
-
+  bool socialId = false;
 // forgot
   final forgot_mobile_number = TextEditingController();
   TextEditingController forgot_code = TextEditingController();
   final forgot_password = TextEditingController();
   final forgot_confirm_password = TextEditingController();
-  bool socialId = false;
 
 // sign up
   final sign_up_mobile_number = TextEditingController();
@@ -56,13 +55,14 @@ class AuthController {
   signIn() async {
     _loading.showLoading();
     final result = await auth.signIn(new SignIn(
-      email: sign_in_mobile_number.text,
+      email: sign_in_email.text,
       password: sign_in_password.text,
+      socialId: socialId,
     ));
     final box = GetStorage();
     box.write('accessToken', result?.resultObject?.accessToken);
     box.write('userId', result?.resultObject?.userId);
-    print(box.read('token'));
+    // print(box.read('token'));
 
     sign_in_response = result!;
     _loading.hideLoading();
@@ -96,7 +96,6 @@ class AuthController {
   //   _loading.hideLoading();
   // }
 
-<<<<<<< HEAD
   signOut() async {
     // _loading.showLoading();
 
@@ -106,9 +105,6 @@ class AuthController {
     Get.toNamed("/login");
     //_loading.hideLoading();
   }
-=======
-  // signOut() async {}
->>>>>>> parent of 73beb63 (auth and get user info)
 
   // checkEmailMobile() async {
   //   _loading.showLoading();
