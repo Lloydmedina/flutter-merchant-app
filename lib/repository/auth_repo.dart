@@ -1,4 +1,3 @@
-import 'package:merchant/model/profile/Getmerchantuserinfo.dart';
 import 'package:merchant/model/signin/check_email_response.dart';
 import 'package:merchant/model/signin/sign_in.dart';
 import 'package:merchant/model/signin/sign_in_response.dart';
@@ -10,8 +9,6 @@ abstract class AuthRepository {
   Future<bool> checkTokenExpirey();
 
   Future<SignInResponse>? signIn(SignIn signIn);
-  Future<Getmerchantuserinfo>? getMerchantUserInfo(
-      Getmerchantuserinfo getmerchantuserinfo);
   //Future<SignUpResponse>? signUp(SignUp rider);
   bool signOut();
   void saveTosharePreferences(SignInResponse response);

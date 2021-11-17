@@ -10,7 +10,6 @@ import 'package:logger/logger.dart';
 import 'package:merchant/controller/auth_controller.dart';
 import 'package:merchant/controller/loading_controller.dart';
 import 'package:merchant/merchant/merchant_shared_pref_credential.dart';
-import 'package:merchant/repository/profile_repo_imp.dart';
 import 'package:merchant/utils/custom_dialog.dart';
 import 'package:merchant/utils/not_found.dart';
 import 'package:merchant/utils/unverified.dart';
@@ -25,7 +24,7 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
   final auth = Get.find<AuthController>();
 <<<<<<< HEAD
   final me = Get.find<ProfileController>();
-  final setMerchantId = Get.find<ProfileController>();
+  final box = new GetStorage();
   MerchantSharedPrefCredential merch = new MerchantSharedPrefCredential();
 =======
 >>>>>>> parent of 73beb63 (auth and get user info)
@@ -34,7 +33,7 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    //autoLogin();
+    autoLogin();
     super.initState();
   }
 
@@ -273,6 +272,7 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
   void doLogin() async {
     await auth.signIn();
     Logger logger = new Logger();
+<<<<<<< HEAD
     final prefs = await SharedPreferences.getInstance();
     String? merchant_credential = prefs.getString("credential");
 <<<<<<< HEAD
@@ -291,15 +291,26 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
           jsonDecode(merchant_credential));
     }
 >>>>>>> parent of 73beb63 (auth and get user info)
+=======
+    final box = GetStorage();
+    String? merchant_credential = box.read("credential");
+>>>>>>> parent of 52c6e8a (profile binding)
     logger.i("SharedPref Data");
     logger.i(merch);
     logger.i(auth.sign_in_response.resultMessage);
     logger.i(auth.sign_in_response.resultEnum);
+    logger.i(me.merchant_info.value.merchantId);
 
 <<<<<<< HEAD
     if (auth.sign_in_response.resultEnum == "Success") {
       Get.toNamed("/home");
-      logger.i(setMerchantId.merchant_info.value.merchantId);
+      if (merchant_credential != null) {
+        merch = MerchantSharedPrefCredential.fromJson(
+            jsonDecode(merchant_credential));
+        box.write("accessToken", merch.accessToken);
+      } else {
+        box.write("accessToken", merch.accessToken);
+      }
     } else if (auth.sign_in_response.resultMessage!.contains("not active")) {
       showDialog(
           context: context,
@@ -370,10 +381,10 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
     }
   }
 
-  // void autoLogin() async {
-  //   var isLogin = box.read("accessToken");
-  //   if (isLogin != null) {
-  //     Get.offAndToNamed('/home');
-  //   }
-  // }
+  void autoLogin() async {
+    String isLogin = box.read("accessToken");
+    if (isLogin != null) {
+      Get.offAndToNamed('/home');
+    }
+  }
 }

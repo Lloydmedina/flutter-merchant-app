@@ -6,7 +6,6 @@ import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
 import 'package:merchant/merchant/merchant_shared_pref_credential.dart';
 import 'package:merchant/model/init_response_parser.dart';
-import 'package:merchant/model/profile/Getmerchantuserinfo.dart';
 import 'package:merchant/model/signin/check_email_response.dart';
 import 'package:merchant/model/signin/sign_in_response.dart';
 import 'package:merchant/repository/auth_repo.dart';
@@ -118,6 +117,7 @@ class AuthRepositoryImplementation extends AuthRepository {
     }
   }
 
+<<<<<<< HEAD
   @override
 <<<<<<< HEAD
   Future<Getmerchantuserinfo>? getMerchantUserInfo(
@@ -130,6 +130,8 @@ class AuthRepositoryImplementation extends AuthRepository {
     throw UnimplementedError();
   }
 
+=======
+>>>>>>> parent of 52c6e8a (profile binding)
   // @override
   // Future<SignUpResponse> signUp(rider) async {
   //   try {
