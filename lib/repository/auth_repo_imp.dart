@@ -20,7 +20,6 @@ class AuthRepositoryImplementation extends AuthRepository {
 
   late SharedPreferences prefs;
   var client = http.Client();
-  var merchUserClient = http.Client();
   final logger = Logger();
 
   AuthRepositoryImplementation() {}
@@ -79,11 +78,10 @@ class AuthRepositoryImplementation extends AuthRepository {
   @override
   Future<SignInResponse>? signIn(data) async {
     try {
-      merchUserClient = http.Client();
+      client = http.Client();
       final url = Uri.parse('${ACCOUNT_BASE_URL}/api/v1/merchant/user/login');
       final body = jsonEncode(data);
-      final response =
-          await merchUserClient.post(url, headers: headers, body: body);
+      final response = await client.post(url, headers: headers, body: body);
       final res = response.body;
 
       client.close();
@@ -107,12 +105,6 @@ class AuthRepositoryImplementation extends AuthRepository {
   }
 
   @override
-  bool signOut() {
-    // TODO: implement signOut
-    throw UnimplementedError();
-  }
-
-  @override
   void saveTosharePreferences(SignInResponse response) async {
     final prefs = await SharedPreferences.getInstance();
     if (response.resultObject != null) {
@@ -127,9 +119,14 @@ class AuthRepositoryImplementation extends AuthRepository {
   }
 
   @override
+<<<<<<< HEAD
   Future<Getmerchantuserinfo>? getMerchantUserInfo(
       Getmerchantuserinfo getmerchantuserinfo) {
     // TODO: implement getMerchantUserInfo
+=======
+  bool signOut() {
+    // TODO: implement signOut
+>>>>>>> parent of 73beb63 (auth and get user info)
     throw UnimplementedError();
   }
 
