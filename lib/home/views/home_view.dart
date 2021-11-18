@@ -5,8 +5,9 @@ import 'package:get_storage/get_storage.dart';
 import 'package:merchant/account/account_view.dart';
 import 'package:merchant/controller/auth_controller.dart';
 import 'package:merchant/controller/profile_controller.dart';
+
 import 'package:merchant/home/views/dashboard_view.dart';
-import 'package:merchant/home/views/drawer_view.dart';
+
 import 'package:merchant/repository/auth_repo_imp.dart';
 
 class HomeView extends StatefulWidget {
@@ -17,6 +18,7 @@ class HomeView extends StatefulWidget {
 class HomeViewState extends State<HomeView> {
   final auth = Get.find<AuthRepositoryImplementation>();
   final profile = Get.find<ProfileController>();
+
   int _selectedIndex = 0;
   final List<Widget> _children = [DashboardView(), AccountView()];
 
@@ -37,14 +39,22 @@ class HomeViewState extends State<HomeView> {
               child: ListTile(
                 title: Obx(() {
                   return Text(
-                    "${profile.merchant_info.value.email}",
+                    "Store Name: ${profile.store_info.value.company}",
                     style: TextStyle(color: Colors.white),
                   );
                 }),
-                subtitle: Text(
-                  "Merchant Id:",
-                  style: TextStyle(color: Colors.white),
-                ),
+                subtitle: Obx(() {
+                  return ListView(children: [
+                    Text(
+                      "Landmark: ${profile.store_info.value.landMark}",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    Text(
+                      "Login Name: ${profile.merchant_info.value.firstName}",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ]);
+                }),
                 leading: CircleAvatar(
                   child: Icon(Icons.perm_identity_outlined),
                   backgroundColor: Colors.white,
@@ -94,7 +104,7 @@ class HomeViewState extends State<HomeView> {
   void initState() {
     final storage = GetStorage();
     if (storage.hasData('accessToken')) {
-      print('Driver data loaded');
+      print('Merchant data loaded');
       profile.getProfileInfo();
     }
     super.initState();

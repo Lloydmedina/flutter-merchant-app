@@ -26,8 +26,7 @@ class LoginView extends StatefulWidget {
 
 class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
   final auth = Get.find<AuthController>();
-  final me = Get.find<ProfileController>();
-  final setMerchantId = Get.find<ProfileController>();
+
   MerchantSharedPrefCredential merch = new MerchantSharedPrefCredential();
   final LoadingController loading_controller = Get.find<LoadingController>();
   bool obscureText = true;
@@ -237,47 +236,52 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
     logger.i(merch);
     logger.i(auth.sign_in_response.resultMessage);
     logger.i(auth.sign_in_response.resultEnum);
+    logger.i(auth.sign_in_response.resultObject!.accessToken);
 
-    if (auth.sign_in_response.resultEnum == "Success") {
-      Get.toNamed("/home");
-      logger.i(setMerchantId.merchant_info.value.merchantId);
-    } else if (auth.sign_in_response.resultMessage!.contains("not active")) {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return CustomDialog(
-              enableCloseButton: true,
-              closeButtonText: "Close",
-              title: "Needs to be verified",
-              onPressedAgreeButton: () {},
-              content: unverifiedContent(),
-              onPressedCloseButton: () {
-                Navigator.of(context, rootNavigator: true).pop();
-              },
-            );
-          });
-    } else {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return CustomDialog(
-              enableCloseButton: true,
-              closeButtonText: "Close",
-              title: "Message",
-              onPressedAgreeButton: () {},
-              content: nothingFoundContent(),
-              onPressedCloseButton: () {
-                Navigator.of(context, rootNavigator: true).pop();
-              },
-            );
-          });
+    final box = GetStorage();
+
+    if (auth.sign_in_response.resultMessage != null) {
+      if (auth.sign_in_response.resultEnum == "Success" &&
+          box.read('accessToken') != null) {
+        Get.offAllNamed("/");
+      } else if (auth.sign_in_response.resultMessage!.contains("not active")) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return CustomDialog(
+                enableCloseButton: true,
+                closeButtonText: "Close",
+                title: "Needs to be verified",
+                onPressedAgreeButton: () {},
+                content: unverifiedContent(),
+                onPressedCloseButton: () {
+                  Navigator.of(context, rootNavigator: true).pop();
+                },
+              );
+            });
+      } else {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return CustomDialog(
+                enableCloseButton: true,
+                closeButtonText: "Close",
+                title: "Message",
+                onPressedAgreeButton: () {},
+                content: nothingFoundContent(),
+                onPressedCloseButton: () {
+                  Navigator.of(context, rootNavigator: true).pop();
+                },
+              );
+            });
+      }
     }
-  }
 
-  // void autoLogin() async {
-  //   var isLogin = box.read("accessToken");
-  //   if (isLogin != null) {
-  //     Get.offAndToNamed('/home');
-  //   }
-  // }
+    // void autoLogin() async {
+    //   var isLogin = box.read("accessToken");
+    //   if (isLogin != null) {
+    //     Get.offAndToNamed('/home');
+    //   }
+    // }
+  }
 }
