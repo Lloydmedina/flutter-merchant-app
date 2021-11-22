@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:get/get.dart';
+import 'package:merchant/controller/auth_controller.dart';
+import 'package:merchant/controller/profile_controller.dart';
 
 class AccountView extends StatefulWidget {
   @override
@@ -7,9 +10,32 @@ class AccountView extends StatefulWidget {
 }
 
 class AccountViewState extends State<AccountView> {
+  final profile = Get.find<ProfileController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: new Text('Account',
+            style: TextStyle(
+              color: Colors.black,
+            )),
+        actions: [
+          // action button
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {},
+          ),
+        ],
+        leading: IconButton(
+          color: Colors.black,
+          icon: Icon(Icons.close_sharp),
+          onPressed: () {
+            //Navigator.pop(context);
+            Get.back();
+          },
+        ),
+      ),
       body: _accountBody(),
     );
   }
@@ -55,7 +81,7 @@ class AccountViewState extends State<AccountView> {
             ),
           ),
           Text(
-            'John Doe',
+            "${profile.merchant_info.value.firstName}",
             style: TextStyle(
                 color: Colors.black, fontSize: 18, fontWeight: FontWeight.w600),
           ),
@@ -149,16 +175,25 @@ class AccountViewState extends State<AccountView> {
 
   Widget _signout() {
     return Container(
-      color: Colors.white,
-      width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.all(16),
-      child: Text(
-        'Sign out account',
-        style: TextStyle(
-            color: Color(0xff007C89),
-            fontSize: 16,
-            fontWeight: FontWeight.w500),
-      ),
-    );
+        color: Colors.white,
+        width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.all(16),
+        child: InkWell(
+          child: Text(
+            'Sign out account',
+            style: TextStyle(
+                color: Color(0xff007C89),
+                fontSize: 16,
+                fontWeight: FontWeight.w500),
+          ),
+          onTap: () {
+            doLogout();
+          },
+        ));
+  }
+
+  void doLogout() {
+    AuthController().signOut();
+    //print('sss');
   }
 }

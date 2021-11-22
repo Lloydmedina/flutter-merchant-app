@@ -1,9 +1,12 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:get/get.dart';
 import 'package:merchant/active_orders/views/active_orders_view.dart';
+import 'package:merchant/controller/profile_controller.dart';
 import 'package:merchant/earnings/views/earnings_view.dart';
 import 'package:merchant/more/views/more_view.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:merchant/preparation/views/preparation_view.dart';
 import 'package:merchant/review/views/review_view.dart';
 import 'package:merchant/staff/views/staff_view.dart';
@@ -18,13 +21,20 @@ class DashboardViewState extends State<DashboardView> {
   bool resume = false;
   bool paused = true;
   bool closed = false;
+  final profile = Get.find<ProfileController>();
+  int selectedtab = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: _dashboardBody(),
-      floatingActionButton: _storeAvialability(),
+      floatingActionButton: Wrap(
+        direction: Axis.vertical,
+        children: [
+          _storeEarning(),
+        ],
+      ),
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterDocked,
     );
@@ -32,32 +42,130 @@ class DashboardViewState extends State<DashboardView> {
 
   Widget _dashboardBody() {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(16),
+        child: Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
       child: Column(
         children: [
           _services(),
+          SizedBox(
+            height: 10,
+          ),
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    child: Text("Recent Activity"),
+                  ),
+                  Container(
+                    child: InkWell(
+                      child: Text("See All"),
+                      // onTap: () =>
+                      //     {Get.toNamed(PassaRoute.WALLET_TRANSACTION_ALL)}
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Divider(
+            height: 5,
+            thickness: 2,
+          ),
+          _incommingOrders()
         ],
       ),
-    );
+    ));
   }
 
   Widget _services() {
-    return Column(
-      children: [
-        Row(
-          children: [
-            _servicesButtons('Incoming Orders', FeatherIcons.shoppingBag, true),
-            _servicesButtons(
-                'Orders in Progress', FeatherIcons.clipboard, false),
-          ],
-        ),
-        Row(
-          children: [
-            _servicesButtons('Order Ready', FeatherIcons.users, false),
-            _servicesButtons('Orders Complete', FeatherIcons.clock, false),
-          ],
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 0, right: 0),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  minimumSize: Size(150, 80),
+                  side: BorderSide(
+                      width: 2,
+                      color: (selectedtab == 1) ? Colors.blue : Colors.grey),
+                ),
+                onPressed: () {
+                  print("incomming order");
+                },
+                child: Column(
+                  children: [
+                    SvgPicture.asset(
+                        'assets/images/order-through-mobile.svg.svg'),
+                    Text("INCOMMING ORDERS")
+                  ],
+                ),
+              ),
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  minimumSize: Size(150, 100),
+                  side: BorderSide(
+                      width: 2,
+                      color: (selectedtab == 2) ? Colors.blue : Colors.grey),
+                ),
+                onPressed: () {
+                  print("incomming order");
+                },
+                child: Column(
+                  children: [
+                    SvgPicture.asset('assets/images/orderpreparing.svg'),
+                    Text("ORDER IN PROGRESS")
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  minimumSize: Size(150, 100),
+                  side: BorderSide(
+                      width: 2,
+                      color: (selectedtab == 3) ? Colors.blue : Colors.grey),
+                ),
+                onPressed: () {
+                  print("incomming order");
+                },
+                child: Column(
+                  children: [
+                    SvgPicture.asset('assets/images/order-riderontheway.svg'),
+                    Text("ORDER READY")
+                  ],
+                ),
+              ),
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  minimumSize: Size(150, 100),
+                  side: BorderSide(
+                      width: 2,
+                      color: (selectedtab == 4) ? Colors.blue : Colors.grey),
+                ),
+                onPressed: () {
+                  print("incomming order");
+                },
+                child: Column(
+                  children: [
+                    SvgPicture.asset('assets/images/order-waiting.svg'),
+                    Text("ORDERS COMPLETED")
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -84,7 +192,7 @@ class DashboardViewState extends State<DashboardView> {
                 child: Badge(
                   showBadge: showBadge,
                   badgeContent: Text(
-                    '1',
+                    '2',
                     style: TextStyle(color: Colors.white, fontSize: 10),
                   ),
                   child: Icon(
@@ -107,339 +215,76 @@ class DashboardViewState extends State<DashboardView> {
     );
   }
 
-  Widget _storeAvialability() {
+  Widget _storeEarning() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       width: MediaQuery.of(context).size.width,
       height: 70,
-      color: closed
-          ? Color(0xffFF7309)
-          : resume
-              ? Color(0xff009D59)
-              : paused
-                  ? Color(0xff4285F4)
-                  : Color(0xffFF7309),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                closed
-                    ? 'Closed'
-                    : resume
-                        ? 'Accepting Orders'
-                        : paused
-                            ? 'Paused'
-                            : 'Closed',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600),
-              ),
-              Text(
-                closed
-                    ? 'Store is closed until resume'
-                    : resume
-                        ? 'Open until 10:30 PM'
-                        : paused
-                            ? 'Will open at 9:30 AM, Aug 13 '
-                            : 'Store is closed until resume',
-                style: TextStyle(color: Colors.white, fontSize: 12),
-              )
-            ],
-          ),
-          InkWell(
-            onTap: () {
-              _selectStoreAvialability(context);
-            },
-            child: Icon(
-              FeatherIcons.moreVertical,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
+      color: Colors.grey,
+      child: Text("Earnings:",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600)),
     );
   }
 
   _navigateServices(String label) {
-    if (label == 'Oders') {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return ActiveOrdersView();
-      }));
+    if (label == 'Incoming Orders') {
+      return _incommingOrders();
     }
-    if (label == 'Staff') {
+    if (label == 'Orders in Progress') {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return StaffView();
       }));
     }
-    if (label == 'Prep Time') {
+    if (label == 'Order Ready') {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return PreparationView();
       }));
     }
-    if (label == 'Reviews') {
+    if (label == 'Orders Complete') {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return ReviewView();
       }));
     }
-    if (label == 'Support') {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return SupportView();
-      }));
-    }
-    if (label == 'More') {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return MoreView();
-      }));
-    }
   }
 
-  void _onStoreChanged(String avialability) {
-    if (avialability == "Resume") {
-      setState(() {
-        resume = true;
-        paused = false;
-        closed = false;
-      });
-    }
-    if (avialability == "Paused") {
-      setState(() {
-        resume = false;
-        paused = true;
-        closed = false;
-      });
-    }
-    if (avialability == "Closed") {
-      setState(() {
-        resume = false;
-        paused = false;
-        closed = true;
-      });
-    }
+  Widget _incommingOrders() {
+    return SingleChildScrollView(
+        child: Container(
+      child: Obx(() => ListView.separated(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            return ListTile(
+                contentPadding: EdgeInsets.all(0),
+                title: Text(
+                    "${profile.order_info.value.resultObject![index].clientName}"),
+                subtitle: Text(
+                    "${profile.order_info.value.resultObject![index].id}"));
+          },
+          separatorBuilder: (context, index) {
+            return Divider();
+          },
+          itemCount: 5)),
+    ));
   }
 
-  void _selectStoreAvialability(BuildContext context) {
-    showModalBottomSheet(
-        barrierColor: Colors.black.withOpacity(0.40),
-        context: context,
-        builder: (context) {
-          return Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    topLeft: const Radius.circular(50.0),
-                    topRight: const Radius.circular(50.0))),
-            padding: EdgeInsets.all(16),
-            height: 325,
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Icon(FeatherIcons.x),
-                    Expanded(
-                      flex: 1,
-                      child: Center(
-                        child: Text(
-                          'Store Availability',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                ListTile(
-                  onTap: () {
-                    _onStoreChanged('Resume');
-                    Navigator.pop(context);
-                  },
-                  leading: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 16,
-                        width: 16,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: Color(0xff009D59)),
-                      )
-                    ],
-                  ),
-                  title: Text(
-                    'Resume',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  subtitle: Text(
-                    'Continue receiving orders',
-                    style: TextStyle(color: Colors.black, fontSize: 12),
-                  ),
-                  trailing: resume
-                      ? Icon(
-                          FeatherIcons.check,
-                          color: Colors.black,
-                        )
-                      : null,
-                ),
-                Divider(),
-                ListTile(
-                  onTap: () {
-                    _onStoreChanged('Paused');
-                    Navigator.pop(context);
-                  },
-                  leading: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 16,
-                        width: 16,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: Color(0xff4285F4)),
-                      )
-                    ],
-                  ),
-                  title: Text(
-                    'Paused',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  trailing: paused
-                      ? Icon(
-                          FeatherIcons.check,
-                          color: Colors.black,
-                        )
-                      : null,
-                  subtitle: Text(
-                    'Stop incoming orders',
-                    style: TextStyle(color: Colors.black, fontSize: 12),
-                  ),
-                ),
-                Divider(),
-                ListTile(
-                  onTap: () {
-                    _onStoreChanged('Closed');
-                    Navigator.pop(context);
-                  },
-                  leading: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 16,
-                        width: 16,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: Color(0xffFF7309)),
-                      )
-                    ],
-                  ),
-                  title: Text(
-                    'Closed',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  subtitle: Text(
-                    'Store closed until it resumes',
-                    style: TextStyle(color: Colors.black, fontSize: 12),
-                  ),
-                  trailing: closed
-                      ? Icon(
-                          FeatherIcons.check,
-                          color: Colors.black,
-                        )
-                      : null,
-                ),
-              ],
-            ),
-          );
-        });
+  Widget _inProgressOrders() {
+    return ListView(
+      children: [Text("in progress oder")],
+    );
   }
 
-  void _switchBranch(BuildContext context) {
-    showModalBottomSheet(
-        barrierColor: Colors.black.withOpacity(0.40),
-        context: context,
-        builder: (context) {
-          return Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    topLeft: const Radius.circular(50.0),
-                    topRight: const Radius.circular(50.0))),
-            padding: EdgeInsets.all(16),
-            height: 235,
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Icon(FeatherIcons.x),
-                    Expanded(
-                      flex: 1,
-                      child: Center(
-                        child: Text(
-                          'Switch Branch',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                ListTile(
-                  onTap: () {},
-                  title: Text(
-                    'Restaurant Name',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  subtitle: Text(
-                    'Store Location Address',
-                    style: TextStyle(color: Colors.black, fontSize: 12),
-                  ),
-                  trailing: Icon(
-                    FeatherIcons.check,
-                    color: Colors.black,
-                  ),
-                ),
-                Divider(),
-                ListTile(
-                  onTap: () {},
-                  title: Text(
-                    'Restaurant Name',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  subtitle: Text(
-                    'Store Location Address',
-                    style: TextStyle(color: Colors.black, fontSize: 12),
-                  ),
-                ),
-              ],
-            ),
-          );
-        });
+  Widget _readyOrders() {
+    return ListView(
+      children: [Text("ready oder")],
+    );
+  }
+
+  Widget _completeOrders() {
+    return ListView(
+      children: [Text("complete oder")],
+    );
   }
 }

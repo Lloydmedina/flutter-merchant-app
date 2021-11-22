@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:logger/logger.dart';
 import 'package:get/get.dart';
+import 'package:merchant/account/account_view.dart';
 import 'package:merchant/binding/initial_binding.dart';
 import 'package:merchant/binding/login_binding.dart';
 import 'package:merchant/home/views/home_view.dart';
@@ -47,6 +48,7 @@ class _MyAppState extends State<MyApp> {
             name: "/dash", page: () => LoginView(), binding: LoginBinding()),
         GetPage(name: "/home", page: () => HomeView()),
         GetPage(name: "/forgot_password", page: () => ForgotPasswordView()),
+        GetPage(name: "/account", page: () => AccountView()),
       ],
       initialRoute: '/',
     );

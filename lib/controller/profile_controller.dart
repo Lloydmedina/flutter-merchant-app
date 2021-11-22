@@ -6,19 +6,24 @@ import 'package:merchant/controller/store_controller.dart';
 
 import 'package:merchant/model/profile/profile.dart';
 import 'package:merchant/model/store/store.dart';
+import 'package:merchant/order/orderDetail.dart';
+import 'package:merchant/repository/order_repo.imp.dart';
 import 'package:merchant/repository/profile_repo.dart';
 import 'package:merchant/repository/profile_repo_imp.dart';
 import 'package:merchant/repository/store_repo_imp.dart';
 import 'package:merchant/repository/store_repo.dart';
 
-class ProfileController {
+class ProfileController extends GetxController {
   ProfileRepository profile = Get.find<ProfileRepositoryImplementation>();
   StoreRepositoryImplementation store =
       Get.find<StoreRepositoryImplementation>();
+  OrderRepositoryImplementation order =
+      Get.find<OrderRepositoryImplementation>();
   LoadingController loading = Get.find<LoadingController>();
   //StoreController store = Get.find<StoreController>();
   Rx<MerchantProfile> merchant_info = new MerchantProfile().obs;
   Rx<MerchantStoreInfo> store_info = new MerchantStoreInfo().obs;
+  Rx<OrderDetails> order_info = new OrderDetails().obs;
 
   final logger = Logger();
 
@@ -46,6 +51,25 @@ class ProfileController {
     final get_store_result =
         await store.getMerchantStoreInfo(merchant_id, acces_token);
     store_info = get_store_result.obs;
+    loading.hideLoading();
+    getOrderInfo();
+  }
+
+  getOrderInfo() async {
+    loading.showLoading();
+    final box = GetStorage();
+
+    String acces_token = box.read("accessToken");
+    String? merchant_id = merchant_info.value.merchantId;
+    String order_dateFrom = '2021-01-01';
+    String order_dateTo = '2021-12-31';
+    int order_status = 0;
+    int order_take = 50;
+    int order_skip = 0;
+
+    final get_order_result = await order.getOrderInfo(merchant_id, acces_token,
+        order_dateFrom, order_dateTo, order_status, order_take, order_skip);
+    order_info = get_order_result.obs;
     loading.hideLoading();
   }
 }
