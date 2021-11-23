@@ -81,24 +81,18 @@ class AccountViewState extends State<AccountView> {
             ),
           ),
           Text(
-            "${profile.merchant_info.value.firstName}",
+            "${profile.merchant_info.value.firstName} " +
+                " ${profile.merchant_info.value.lastName}",
             style: TextStyle(
                 color: Colors.black, fontSize: 18, fontWeight: FontWeight.w600),
           ),
           Text(
-            'storeowner@passafood.co',
+            '${profile.merchant_info.value.email}',
             style: TextStyle(color: Colors.black, fontSize: 14),
           ),
           Text(
-            '+639287130991',
+            '${profile.merchant_info.value.mobileNumber}',
             style: TextStyle(color: Colors.black, fontSize: 14),
-          ),
-          Text(
-            '+Owner',
-            style: TextStyle(
-                color: Color(0xff007C89),
-                fontSize: 12,
-                fontWeight: FontWeight.w500),
           ),
         ],
       ),

@@ -101,8 +101,7 @@ class DashboardViewState extends State<DashboardView> {
                 },
                 child: Column(
                   children: [
-                    SvgPicture.asset(
-                        'assets/images/order-through-mobile.svg.svg'),
+                    SvgPicture.asset('assets/images/order-through.svg'),
                     Text("INCOMMING ORDERS")
                   ],
                 ),
@@ -250,24 +249,58 @@ class DashboardViewState extends State<DashboardView> {
   }
 
   Widget _incommingOrders() {
-    return SingleChildScrollView(
-        child: Container(
-      child: Obx(() => ListView.separated(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) {
-            return ListTile(
-                contentPadding: EdgeInsets.all(0),
-                title: Text(
-                    "${profile.order_info.value.resultObject![index].clientName}"),
-                subtitle: Text(
-                    "${profile.order_info.value.resultObject![index].id}"));
-          },
-          separatorBuilder: (context, index) {
-            return Divider();
-          },
-          itemCount: 5)),
-    ));
+    var res;
+    if (profile.order_info.value.resultObject == null) {
+      res = Container(
+          child: ListView.separated(
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return Container(
+                  child: Column(
+                    children: [
+                      Text("Data Not Found"),
+                    ],
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return Divider();
+              },
+              itemCount: 1));
+    } else {
+      res = SingleChildScrollView(
+          child: Container(
+        child: Obx(() => ListView.separated(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return Container(
+                child: Column(
+                  children: [
+                    Text(profile.order_info.value.resultObject == null
+                        ? "Data Not Found "
+                        : "${profile.order_info.value.resultObject![index].id}"),
+                    Text(profile.order_info.value.resultObject == null
+                        ? "Data Not Found "
+                        : "${profile.order_info.value.resultObject![index].clientName}"),
+                    Text(profile.order_info.value.resultObject == null
+                        ? "Data Not Found "
+                        : "${profile.order_info.value.resultObject![index].merchantName}")
+                  ],
+                ),
+              );
+            },
+            separatorBuilder: (context, index) {
+              return Divider();
+            },
+            itemCount: profile.order_info.value.resultObject == null
+                ? 1
+                : profile.order_info.value.resultObject!.length > 5
+                    ? 5
+                    : profile.order_info.value.resultObject!.length)),
+      ));
+    }
+    return res;
   }
 
   Widget _inProgressOrders() {

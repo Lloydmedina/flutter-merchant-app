@@ -52,7 +52,7 @@ class ProfileController extends GetxController {
         await store.getMerchantStoreInfo(merchant_id, acces_token);
     store_info = get_store_result.obs;
     loading.hideLoading();
-    getOrderInfo();
+    //getOrderInfo();
   }
 
   getOrderInfo() async {
@@ -70,6 +70,7 @@ class ProfileController extends GetxController {
     final get_order_result = await order.getOrderInfo(merchant_id, acces_token,
         order_dateFrom, order_dateTo, order_status, order_take, order_skip);
     order_info = get_order_result.obs;
+
     loading.hideLoading();
   }
 }

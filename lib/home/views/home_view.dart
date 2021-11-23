@@ -35,34 +35,48 @@ class HomeViewState extends State<HomeView> {
       drawer: Drawer(
         child: ListView(
           children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.amber,
+            UserAccountsDrawerHeader(
+              currentAccountPictureSize: const Size.square(50),
+              decoration: BoxDecoration(color: Colors.amber),
+              currentAccountPicture: new CircleAvatar(
+                child: Icon(
+                  FeatherIcons.user,
+                ),
+                backgroundColor: Colors.white,
               ),
-              child: ListTile(
-                title: Obx(() {
-                  return Text(
-                    "${profile.store_info.value.company}",
-                    style: TextStyle(color: Colors.white),
-                  );
-                }),
-                subtitle: Obx(() {
-                  return ListView(children: [
+              accountName: Obx(() {
+                return Text(
+                  "${profile.store_info.value.company}",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 35,
+                      fontWeight: FontWeight.w900,
+                      fontFamily: "Poppins"),
+                );
+              }),
+              accountEmail: Obx(() {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
                       "${profile.store_info.value.landMark}",
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
                     ),
-                    Text(
-                      "${profile.merchant_info.value.firstName}",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ]);
-                }),
-                leading: CircleAvatar(
-                  child: Icon(FeatherIcons.user),
-                  backgroundColor: Colors.white,
-                ),
-              ),
+                    Expanded(
+                        child: Text(
+                            "${profile.merchant_info.value.firstName} " +
+                                " ${profile.merchant_info.value.lastName}",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                                overflow: TextOverflow.ellipsis))),
+                  ],
+                );
+              }),
             ),
             ListTile(
               leading: Icon(FeatherIcons.user),
