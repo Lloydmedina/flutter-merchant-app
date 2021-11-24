@@ -416,7 +416,7 @@ class DashboardViewState extends State<DashboardView>
                 return Container(
                   child: Column(
                     children: [
-                      Text("Data Not Found"),
+                      Text("No Incomming Orders."),
                     ],
                   ),
                 );
@@ -462,34 +462,171 @@ class DashboardViewState extends State<DashboardView>
   }
 
   Widget _inProgressOrders() {
-    return SlideTransition(
-      position: Tween<Offset>(begin: Offset(-1, 0), end: Offset.zero)
-          .animate(_controller),
-      child: Container(
-        color: Colors.blue,
-        height: 200,
-      ),
-    );
+    var res;
+    if (profile.order_info.value.resultObject == null) {
+      res = Container(
+          child: ListView.separated(
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return Container(
+                  child: Column(
+                    children: [
+                      Text("No Orders In Progress."),
+                    ],
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return Divider();
+              },
+              itemCount: 1));
+    } else {
+      res = SingleChildScrollView(
+          child: Container(
+        child: Obx(() => ListView.separated(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return Container(
+                child: Column(
+                  children: [
+                    Text(profile.order_in_progress_info.value.resultObject ==
+                            null
+                        ? "Data Not Found "
+                        : "${profile.order_in_progress_info.value.resultObject![index].id}"),
+                    Text(profile.order_in_progress_info.value.resultObject ==
+                            null
+                        ? "Data Not Found "
+                        : "${profile.order_in_progress_info.value.resultObject![index].clientName}"),
+                    Text(profile.order_in_progress_info.value.resultObject ==
+                            null
+                        ? "Data Not Found "
+                        : "${profile.order_in_progress_info.value.resultObject![index].merchantName}")
+                  ],
+                ),
+              );
+            },
+            separatorBuilder: (context, index) {
+              return Divider();
+            },
+            itemCount: profile.order_in_progress_info.value.resultObject == null
+                ? 1
+                : profile.order_in_progress_info.value.resultObject!.length > 5
+                    ? 5
+                    : profile
+                        .order_in_progress_info.value.resultObject!.length)),
+      ));
+    }
+    return res;
   }
 
   Widget _readyOrders() {
-    return SlideTransition(
-      position: Tween<Offset>(begin: Offset(-1, 0), end: Offset.zero)
-          .animate(_controller),
-      child: Container(
-        color: Colors.green,
-        height: 200,
-      ),
-    );
+    var res;
+    if (profile.order_info.value.resultObject == null) {
+      res = Container(
+          child: ListView.separated(
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return Container(
+                  child: Column(
+                    children: [
+                      Text("No Ready Orders."),
+                    ],
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return Divider();
+              },
+              itemCount: 1));
+    } else {
+      res = SingleChildScrollView(
+          child: Container(
+        child: Obx(() => ListView.separated(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return Container(
+                child: Column(
+                  children: [
+                    Text(profile.order_ready_info.value.resultObject == null
+                        ? "Data Not Found "
+                        : "${profile.order_ready_info.value.resultObject![index].id}"),
+                    Text(profile.order_ready_info.value.resultObject == null
+                        ? "Data Not Found "
+                        : "${profile.order_ready_info.value.resultObject![index].clientName}"),
+                    Text(profile.order_ready_info.value.resultObject == null
+                        ? "Data Not Found "
+                        : "${profile.order_ready_info.value.resultObject![index].merchantName}")
+                  ],
+                ),
+              );
+            },
+            separatorBuilder: (context, index) {
+              return Divider();
+            },
+            itemCount: profile.order_ready_info.value.resultObject == null
+                ? 1
+                : profile.order_ready_info.value.resultObject!.length > 5
+                    ? 5
+                    : profile.order_ready_info.value.resultObject!.length)),
+      ));
+    }
+    return res;
   }
 
   Widget _completeOrders() {
-    return FadeTransition(
-      opacity: Tween(begin: 0.0, end: 1.0).animate(_controller),
-      child: Container(
-        color: Colors.yellow,
-        height: 200,
-      ),
-    );
+    var res;
+    if (profile.order_info.value.resultObject == null) {
+      res = Container(
+          child: ListView.separated(
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return Container(
+                  child: Column(
+                    children: [
+                      Text("No Completed Orders."),
+                    ],
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return Divider();
+              },
+              itemCount: 1));
+    } else {
+      res = SingleChildScrollView(
+          child: Container(
+        child: Obx(() => ListView.separated(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return Container(
+                child: Column(
+                  children: [
+                    Text(profile.order_completed_info.value.resultObject == null
+                        ? "Data Not Found "
+                        : "${profile.order_completed_info.value.resultObject![index].id}"),
+                    Text(profile.order_completed_info.value.resultObject == null
+                        ? "Data Not Found "
+                        : "${profile.order_completed_info.value.resultObject![index].clientName}"),
+                    Text(profile.order_completed_info.value.resultObject == null
+                        ? "Data Not Found "
+                        : "${profile.order_completed_info.value.resultObject![index].merchantName}")
+                  ],
+                ),
+              );
+            },
+            separatorBuilder: (context, index) {
+              return Divider();
+            },
+            itemCount: profile.order_completed_info.value.resultObject == null
+                ? 1
+                : profile.order_completed_info.value.resultObject!.length > 5
+                    ? 5
+                    : profile.order_completed_info.value.resultObject!.length)),
+      ));
+    }
+    return res;
   }
 }

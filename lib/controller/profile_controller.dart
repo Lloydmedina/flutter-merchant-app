@@ -24,6 +24,9 @@ class ProfileController extends GetxController {
   Rx<MerchantProfile> merchant_info = new MerchantProfile().obs;
   Rx<MerchantStoreInfo> store_info = new MerchantStoreInfo().obs;
   Rx<OrderDetails> order_info = new OrderDetails().obs;
+  Rx<OrderDetails> order_in_progress_info = new OrderDetails().obs;
+  Rx<OrderDetails> order_ready_info = new OrderDetails().obs;
+  Rx<OrderDetails> order_completed_info = new OrderDetails().obs;
 
   final logger = Logger();
 
@@ -63,13 +66,70 @@ class ProfileController extends GetxController {
     String? merchant_id = merchant_info.value.merchantId;
     String order_dateFrom = '2021-01-01';
     String order_dateTo = '2021-12-31';
-    int order_status = 0;
-    int order_take = 50;
+    String order_status = 'Accepted';
+    int order_take = 6;
     int order_skip = 0;
 
     final get_order_result = await order.getOrderInfo(merchant_id, acces_token,
         order_dateFrom, order_dateTo, order_status, order_take, order_skip);
     order_info = get_order_result.obs;
+
+    getOrderInProgressInfo();
+  }
+
+  getOrderInProgressInfo() async {
+    loading.showLoading();
+    final box = GetStorage();
+
+    String acces_token = box.read("accessToken");
+    String? merchant_id = merchant_info.value.merchantId;
+    String order_dateFrom = '2021-01-01';
+    String order_dateTo = '2021-12-31';
+    String order_status = 'Pending';
+    int order_take = 6;
+    int order_skip = 0;
+
+    final get_order_result = await order.getOrderInfo(merchant_id, acces_token,
+        order_dateFrom, order_dateTo, order_status, order_take, order_skip);
+    order_in_progress_info = get_order_result.obs;
+
+    getOrderInReadyInfo();
+  }
+
+  getOrderInReadyInfo() async {
+    loading.showLoading();
+    final box = GetStorage();
+
+    String acces_token = box.read("accessToken");
+    String? merchant_id = merchant_info.value.merchantId;
+    String order_dateFrom = '2021-01-01';
+    String order_dateTo = '2021-12-31';
+    String order_status = 'Completed';
+    int order_take = 6;
+    int order_skip = 0;
+
+    final get_order_result = await order.getOrderInfo(merchant_id, acces_token,
+        order_dateFrom, order_dateTo, order_status, order_take, order_skip);
+    order_ready_info = get_order_result.obs;
+
+    getOrderCompletedInfo();
+  }
+
+  getOrderCompletedInfo() async {
+    loading.showLoading();
+    final box = GetStorage();
+
+    String acces_token = box.read("accessToken");
+    String? merchant_id = merchant_info.value.merchantId;
+    String order_dateFrom = '2021-01-01';
+    String order_dateTo = '2021-12-31';
+    String order_status = 'Completed';
+    int order_take = 6;
+    int order_skip = 0;
+
+    final get_order_result = await order.getOrderInfo(merchant_id, acces_token,
+        order_dateFrom, order_dateTo, order_status, order_take, order_skip);
+    order_completed_info = get_order_result.obs;
 
     loading.hideLoading();
   }

@@ -24,7 +24,7 @@ class OrderRepositoryImplementation implements OrderRepository {
       String acces_token,
       String order_dateFrom,
       String order_dateTo,
-      int order_status,
+      String order_status,
       int order_take,
       int order_skip) async {
     try {

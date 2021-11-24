@@ -236,7 +236,8 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
     logger.i(merch);
     logger.i(auth.sign_in_response.resultMessage);
     logger.i(auth.sign_in_response.resultEnum);
-    //logger.i(auth.sign_in_response.resultObject!.accessToken);
+    logger.i(auth.sign_in_response.resultObject!.accessToken);
+    logger.i(auth.sign_in_response.resultObject!.userId);
 
     final box = GetStorage();
 
