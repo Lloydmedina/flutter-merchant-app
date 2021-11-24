@@ -23,7 +23,8 @@ class HomeViewState extends State<HomeView> {
   bool closed = false;
 
   int _selectedIndex = 0;
-  final List<Widget> _children = [DashboardView(), AccountView()];
+
+  final List<Widget> _children = [DashboardView()];
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +104,9 @@ class HomeViewState extends State<HomeView> {
           ],
         ),
       ),
-      body: _children[_selectedIndex],
+      body: Container(
+        child: DashboardView(),
+      ),
       bottomNavigationBar: _storeAvialability(),
     );
   }

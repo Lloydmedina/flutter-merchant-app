@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_statements
+
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -17,12 +19,36 @@ class DashboardView extends StatefulWidget {
   DashboardViewState createState() => DashboardViewState();
 }
 
-class DashboardViewState extends State<DashboardView> {
+enum WidgetMarker {
+  btn_incommingOrders,
+  btn_ordersInProgess,
+  btn_orderReady,
+  btn_orderComplete
+}
+
+class DashboardViewState extends State<DashboardView>
+    with SingleTickerProviderStateMixin<DashboardView> {
+  WidgetMarker selectedWidgetMarker = WidgetMarker.btn_incommingOrders;
   bool resume = false;
   bool paused = true;
   bool closed = false;
   final profile = Get.find<ProfileController>();
   int selectedtab = 0;
+  late AnimationController _controller;
+  late Animation<dynamic> _animation;
+  @override
+  void initState() {
+    super.initState();
+    _controller =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 200));
+    _animation = Tween(begin: 0.0, end: 0.3).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +72,103 @@ class DashboardViewState extends State<DashboardView> {
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: Column(
         children: [
-          _services(),
+          Column(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: Size(150, 80),
+                      side: BorderSide(
+                          width: 2,
+                          color:
+                              (selectedtab == 1) ? Colors.blue : Colors.grey),
+                    ),
+                    onPressed: () {
+                      print("incomming order");
+                      setState(() {
+                        selectedWidgetMarker = WidgetMarker.btn_incommingOrders;
+                      });
+                    },
+                    child: Column(
+                      children: [
+                        SvgPicture.asset('assets/images/order-through.svg'),
+                        Text("INCOMMING ORDERS")
+                      ],
+                    ),
+                  ),
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: Size(150, 100),
+                      side: BorderSide(
+                          width: 2,
+                          color:
+                              (selectedtab == 2) ? Colors.blue : Colors.grey),
+                    ),
+                    onPressed: () {
+                      print("orders in progress");
+                      setState(() {
+                        selectedWidgetMarker = WidgetMarker.btn_ordersInProgess;
+                      });
+                    },
+                    child: Column(
+                      children: [
+                        SvgPicture.asset('assets/images/orderpreparing.svg'),
+                        Text("ORDER IN PROGRESS")
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: Size(150, 100),
+                      side: BorderSide(
+                          width: 2,
+                          color:
+                              (selectedtab == 3) ? Colors.blue : Colors.grey),
+                    ),
+                    onPressed: () {
+                      print("order ready");
+                      setState(() {
+                        selectedWidgetMarker = WidgetMarker.btn_orderReady;
+                      });
+                    },
+                    child: Column(
+                      children: [
+                        SvgPicture.asset(
+                            'assets/images/order-riderontheway.svg'),
+                        Text("ORDER READY")
+                      ],
+                    ),
+                  ),
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: Size(150, 100),
+                      side: BorderSide(
+                          width: 2,
+                          color:
+                              (selectedtab == 4) ? Colors.blue : Colors.grey),
+                    ),
+                    onPressed: () {
+                      print("orders completed");
+                      setState(() {
+                        selectedWidgetMarker = WidgetMarker.btn_orderComplete;
+                      });
+                    },
+                    child: Column(
+                      children: [
+                        SvgPicture.asset('assets/images/order-waiting.svg'),
+                        Text("ORDERS COMPLETED")
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
           SizedBox(
             height: 10,
           ),
@@ -76,19 +198,35 @@ class DashboardViewState extends State<DashboardView> {
             height: 5,
             thickness: 2,
           ),
-          _incommingOrders()
+          FutureBuilder(
+            future: _playAnimation(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              return SlideTransition(
+                  position:
+                      Tween<Offset>(begin: Offset(-1, 0), end: Offset.zero)
+                          .animate(_controller),
+                  //FadeTransition(
+                  // opacity: Tween(begin: 0.0, end: 1.0).animate(_controller),
+                  child: widgetLoader());
+            },
+          )
         ],
       ),
     ));
   }
 
-  Widget _services() {
+  _playAnimation() {
+    _controller.reset();
+    _controller.forward();
+  }
+
+  Widget _services(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 0, right: 0),
       child: Column(
-        children: [
+        children: <Widget>[
           Row(
-            children: [
+            children: <Widget>[
               OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   minimumSize: Size(150, 80),
@@ -98,6 +236,9 @@ class DashboardViewState extends State<DashboardView> {
                 ),
                 onPressed: () {
                   print("incomming order");
+                  setState(() {
+                    selectedWidgetMarker = WidgetMarker.btn_incommingOrders;
+                  });
                 },
                 child: Column(
                   children: [
@@ -114,7 +255,8 @@ class DashboardViewState extends State<DashboardView> {
                       color: (selectedtab == 2) ? Colors.blue : Colors.grey),
                 ),
                 onPressed: () {
-                  print("incomming order");
+                  print("orders in progress");
+                  selectedWidgetMarker = WidgetMarker.btn_ordersInProgess;
                 },
                 child: Column(
                   children: [
@@ -135,7 +277,8 @@ class DashboardViewState extends State<DashboardView> {
                       color: (selectedtab == 3) ? Colors.blue : Colors.grey),
                 ),
                 onPressed: () {
-                  print("incomming order");
+                  print("order ready");
+                  selectedWidgetMarker = WidgetMarker.btn_orderReady;
                 },
                 child: Column(
                   children: [
@@ -152,7 +295,8 @@ class DashboardViewState extends State<DashboardView> {
                       color: (selectedtab == 4) ? Colors.blue : Colors.grey),
                 ),
                 onPressed: () {
-                  print("incomming order");
+                  print("orders completed");
+                  selectedWidgetMarker = WidgetMarker.btn_orderComplete;
                 },
                 child: Column(
                   children: [
@@ -248,6 +392,20 @@ class DashboardViewState extends State<DashboardView> {
     }
   }
 
+  Widget widgetLoader() {
+    switch (selectedWidgetMarker) {
+      case WidgetMarker.btn_incommingOrders:
+        return _incommingOrders();
+      case WidgetMarker.btn_ordersInProgess:
+        return _inProgressOrders();
+      case WidgetMarker.btn_orderReady:
+        return _readyOrders();
+      case WidgetMarker.btn_orderComplete:
+        return _completeOrders();
+    }
+    return widgetLoader();
+  }
+
   Widget _incommingOrders() {
     var res;
     if (profile.order_info.value.resultObject == null) {
@@ -304,20 +462,34 @@ class DashboardViewState extends State<DashboardView> {
   }
 
   Widget _inProgressOrders() {
-    return ListView(
-      children: [Text("in progress oder")],
+    return SlideTransition(
+      position: Tween<Offset>(begin: Offset(-1, 0), end: Offset.zero)
+          .animate(_controller),
+      child: Container(
+        color: Colors.blue,
+        height: 200,
+      ),
     );
   }
 
   Widget _readyOrders() {
-    return ListView(
-      children: [Text("ready oder")],
+    return SlideTransition(
+      position: Tween<Offset>(begin: Offset(-1, 0), end: Offset.zero)
+          .animate(_controller),
+      child: Container(
+        color: Colors.green,
+        height: 200,
+      ),
     );
   }
 
   Widget _completeOrders() {
-    return ListView(
-      children: [Text("complete oder")],
+    return FadeTransition(
+      opacity: Tween(begin: 0.0, end: 1.0).animate(_controller),
+      child: Container(
+        color: Colors.yellow,
+        height: 200,
+      ),
     );
   }
 }
