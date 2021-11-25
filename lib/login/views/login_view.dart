@@ -276,6 +276,21 @@ class LoginViewState extends State<LoginView> with TickerProviderStateMixin {
               );
             });
       }
+    } else {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return CustomDialog(
+              enableCloseButton: true,
+              closeButtonText: "Close",
+              title: "Message",
+              onPressedAgreeButton: () {},
+              content: nothingFoundContent(),
+              onPressedCloseButton: () {
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            );
+          });
     }
 
     // void autoLogin() async {

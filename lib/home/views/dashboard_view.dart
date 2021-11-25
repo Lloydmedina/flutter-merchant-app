@@ -73,8 +73,10 @@ class DashboardViewState extends State<DashboardView>
       child: Column(
         children: [
           Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   OutlinedButton(
                     style: OutlinedButton.styleFrom(
@@ -92,7 +94,8 @@ class DashboardViewState extends State<DashboardView>
                     },
                     child: Column(
                       children: [
-                        SvgPicture.asset('assets/images/order-through.svg'),
+                        // SvgPicture.asset('assets/images/Group13.png'),
+                        Image.asset('assets/images/Group13.png'),
                         Text("INCOMMING ORDERS")
                       ],
                     ),
@@ -113,18 +116,23 @@ class DashboardViewState extends State<DashboardView>
                     },
                     child: Column(
                       children: [
-                        SvgPicture.asset('assets/images/orderpreparing.svg'),
+                        //SvgPicture.asset('assets/images/orderpreparing.svg'),
+                        Image.asset('assets/images/orderpreparing.png'),
                         Text("ORDER IN PROGRESS")
                       ],
                     ),
                   ),
                 ],
               ),
+              SizedBox(
+                height: 8,
+              ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   OutlinedButton(
                     style: OutlinedButton.styleFrom(
-                      minimumSize: Size(150, 100),
+                      minimumSize: Size(180, 120),
                       side: BorderSide(
                           width: 2,
                           color:
@@ -138,8 +146,9 @@ class DashboardViewState extends State<DashboardView>
                     },
                     child: Column(
                       children: [
-                        SvgPicture.asset(
-                            'assets/images/order-riderontheway.svg'),
+                        //SvgPicture.asset(
+                        //'assets/images/order-riderontheway.svg'),
+                        Image.asset('assets/images/order-riderontheway.png'),
                         Text("ORDER READY")
                       ],
                     ),
@@ -160,7 +169,8 @@ class DashboardViewState extends State<DashboardView>
                     },
                     child: Column(
                       children: [
-                        SvgPicture.asset('assets/images/order-waiting.svg'),
+                        //SvgPicture.asset('assets/images/order-waiting.svg'),
+                        Image.asset('assets/images/order-waiting.png'),
                         Text("ORDERS COMPLETED")
                       ],
                     ),

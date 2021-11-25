@@ -66,7 +66,7 @@ class ProfileController extends GetxController {
     String? merchant_id = merchant_info.value.merchantId;
     String order_dateFrom = '2021-01-01';
     String order_dateTo = '2021-12-31';
-    String order_status = 'Accepted';
+    String order_status = '0';
     int order_take = 6;
     int order_skip = 0;
 

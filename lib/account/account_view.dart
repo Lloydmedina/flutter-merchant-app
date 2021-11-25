@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
 import 'package:merchant/controller/auth_controller.dart';
+import 'package:merchant/controller/email_controller.dart';
 import 'package:merchant/controller/profile_controller.dart';
+import 'package:merchant/utils/custom_dialog.dart';
+import 'package:merchant/utils/email_sent.dart';
 
 class AccountView extends StatefulWidget {
   @override
@@ -11,6 +14,7 @@ class AccountView extends StatefulWidget {
 
 class AccountViewState extends State<AccountView> {
   final profile = Get.find<ProfileController>();
+  final emailService = Get.find<EmailController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,6 +114,45 @@ class AccountViewState extends State<AccountView> {
             padding: EdgeInsets.only(top: 16, bottom: 16),
             child: Row(
               children: [
+                Icon(FeatherIcons.edit),
+                SizedBox(
+                  width: 17,
+                ),
+                InkWell(
+                  splashColor: Colors.yellow,
+                  highlightColor: Colors.green,
+                  child: Text(
+                    'Reset Password',
+                    style: TextStyle(
+                        color: Color(0xff007C89),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CustomDialog(
+                            enableCloseButton: true,
+                            closeButtonText: "OK",
+                            title: "Message",
+                            onPressedAgreeButton: () {},
+                            content: emailSent(),
+                            onPressedCloseButton: () {
+                              doemail();
+                              Navigator.of(context, rootNavigator: true).pop();
+                            },
+                          );
+                        });
+                  },
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(top: 16, bottom: 16),
+            child: Row(
+              children: [
                 Icon(FeatherIcons.bookOpen),
                 SizedBox(
                   width: 17,
@@ -189,5 +232,41 @@ class AccountViewState extends State<AccountView> {
   void doLogout() {
     AuthController().signOut();
     //print('sss');
+  }
+
+  void doemail() async {
+    await emailService.sendToEmali();
+
+    if (emailService.email_response.resultObject == 'Ok') {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return CustomDialog(
+              enableCloseButton: true,
+              closeButtonText: "OK",
+              title: "Email Successfuly sent.",
+              onPressedAgreeButton: () {},
+              content: emailResponse(),
+              onPressedCloseButton: () {
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            );
+          });
+    } else {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return CustomDialog(
+              enableCloseButton: true,
+              closeButtonText: "OK",
+              title: "Opps! Something went wrong.",
+              onPressedAgreeButton: () {},
+              content: emailError(),
+              onPressedCloseButton: () {
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            );
+          });
+    }
   }
 }

@@ -35,6 +35,7 @@ class HomeViewState extends State<HomeView> {
       ),
       drawer: Drawer(
         child: ListView(
+          padding: EdgeInsets.zero,
           children: [
             UserAccountsDrawerHeader(
               currentAccountPictureSize: const Size.square(50),
@@ -50,7 +51,7 @@ class HomeViewState extends State<HomeView> {
                   "${profile.store_info.value.company}",
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 35,
+                      fontSize: 32,
                       fontWeight: FontWeight.w900,
                       fontFamily: "Poppins"),
                 );

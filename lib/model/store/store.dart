@@ -53,8 +53,8 @@ class MerchantStoreInfo {
   String? zipCode;
   String? landMark;
   dynamic imagePath;
-  double? latitude;
-  double? longitude;
+  int? latitude;
+  int? longitude;
   String? status;
 
   factory MerchantStoreInfo.fromJson(Map<String, dynamic> json) =>

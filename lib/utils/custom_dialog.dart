@@ -64,7 +64,7 @@ class _CustomDialogState extends State<CustomDialog> {
                           child: Container(
                             child: TextButton(
                                 style: TextButton.styleFrom(
-                                  backgroundColor: Color(0xFFF7F7F7),
+                                  backgroundColor: Colors.amber,
                                   minimumSize: Size(
                                       MediaQuery.of(context).size.width, 52),
                                   shape: RoundedRectangleBorder(
