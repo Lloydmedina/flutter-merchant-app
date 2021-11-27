@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
+import 'package:merchant/model/email/email_parser.dart';
 import 'package:merchant/model/email/email_response.dart';
 import 'package:merchant/model/init_response_parser.dart';
 import 'package:merchant/repository/email_repo.dart';
@@ -24,9 +25,9 @@ class EmailServicesImplementaion implements EmailServicesRepository {
       String? access_token) async {
     try {
       client = http.Client();
-
+      //final body = EmailServicesParser().toJson(receipientEmail);
       final url = Uri.parse(
-          '${ACCOUNT_BASE_URL}/api/v1/email/sendemailtemplate/${receipientEmail}/${receipientName}/${subject}/${header}/${body}/${linkUrl}');
+          '${ACCOUNT_BASE_URL}/api/v1/email/sendemailtemplate/${receipientEmail},${receipientName},${subject},${header},${body},${linkUrl}');
       final response = await client.get(url, headers: {
         ...headers,
         'Authorization': 'Bearer ${access_token}',

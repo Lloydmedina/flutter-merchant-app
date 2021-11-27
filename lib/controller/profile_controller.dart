@@ -1,5 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
+
 import 'package:logger/logger.dart';
 import 'package:merchant/controller/loading_controller.dart';
 import 'package:merchant/controller/store_controller.dart';
@@ -24,10 +27,11 @@ class ProfileController extends GetxController {
   Rx<MerchantProfile> merchant_info = new MerchantProfile().obs;
   Rx<MerchantStoreInfo> store_info = new MerchantStoreInfo().obs;
   Rx<OrderDetails> order_info = new OrderDetails().obs;
+  Rx<OrderDetails> order_incomming = new OrderDetails().obs;
   Rx<OrderDetails> order_in_progress_info = new OrderDetails().obs;
   Rx<OrderDetails> order_ready_info = new OrderDetails().obs;
   Rx<OrderDetails> order_completed_info = new OrderDetails().obs;
-
+  int selected = 0;
   final logger = Logger();
 
   ProfileController() {}
@@ -42,6 +46,7 @@ class ProfileController extends GetxController {
         await profile.getMerchantInfo(userid, access_token);
     merchant_info = get_profile_result.obs;
     getStoreInfo();
+    getOrderInfo();
   }
 
   getStoreInfo() async {
@@ -55,37 +60,56 @@ class ProfileController extends GetxController {
         await store.getMerchantStoreInfo(merchant_id, acces_token);
     store_info = get_store_result.obs;
     loading.hideLoading();
-    //getOrderInfo();
+    getOrderInfo();
   }
 
   getOrderInfo() async {
     loading.showLoading();
     final box = GetStorage();
-
+    DateTime dnow = new DateTime.now();
     String acces_token = box.read("accessToken");
     String? merchant_id = merchant_info.value.merchantId;
-    String order_dateFrom = '2021-01-01';
-    String order_dateTo = '2021-12-31';
+    String order_dateFrom = '2021-11-01';
+    String order_dateTo = DateFormat('yyyy-MM-dd').format(dnow);
     String order_status = '0';
-    int order_take = 6;
+    int order_take = 100;
     int order_skip = 0;
 
     final get_order_result = await order.getOrderInfo(merchant_id, acces_token,
         order_dateFrom, order_dateTo, order_status, order_take, order_skip);
     order_info = get_order_result.obs;
 
-    getOrderInProgressInfo();
+    //getOrderInProgressInfo();
+  }
+
+  getIncommingOrderInfo() async {
+    loading.showLoading();
+    final box = GetStorage();
+    DateTime dnow = new DateTime.now();
+    String acces_token = box.read("accessToken");
+    String? merchant_id = merchant_info.value.merchantId;
+    String order_dateFrom = DateFormat('yyyy-MM-dd').format(dnow);
+    String order_dateTo = DateFormat('yyyy-MM-dd').format(dnow);
+    String order_status = 'CPO';
+    int order_take = 5;
+    int order_skip = 0;
+
+    final get_order_result = await order.getOrderInfo(merchant_id, acces_token,
+        order_dateFrom, order_dateTo, order_status, order_take, order_skip);
+    order_incomming = get_order_result.obs;
+
+    //getOrderInProgressInfo();
   }
 
   getOrderInProgressInfo() async {
     loading.showLoading();
     final box = GetStorage();
-
+    DateTime dnow = new DateTime.now();
     String acces_token = box.read("accessToken");
     String? merchant_id = merchant_info.value.merchantId;
-    String order_dateFrom = '2021-01-01';
-    String order_dateTo = '2021-12-31';
-    String order_status = 'Pending';
+    String order_dateFrom = DateFormat('yyyy-MM-dd').format(dnow);
+    String order_dateTo = DateFormat('yyyy-MM-dd').format(dnow);
+    String order_status = 'MAO';
     int order_take = 6;
     int order_skip = 0;
 
@@ -93,18 +117,18 @@ class ProfileController extends GetxController {
         order_dateFrom, order_dateTo, order_status, order_take, order_skip);
     order_in_progress_info = get_order_result.obs;
 
-    getOrderInReadyInfo();
+    // getOrderInReadyInfo();
   }
 
   getOrderInReadyInfo() async {
     loading.showLoading();
     final box = GetStorage();
-
+    DateTime dnow = new DateTime.now();
     String acces_token = box.read("accessToken");
     String? merchant_id = merchant_info.value.merchantId;
-    String order_dateFrom = '2021-01-01';
-    String order_dateTo = '2021-12-31';
-    String order_status = 'Completed';
+    String order_dateFrom = DateFormat('yyyy-MM-dd').format(dnow);
+    String order_dateTo = DateFormat('yyyy-MM-dd').format(dnow);
+    String order_status = 'MOR';
     int order_take = 6;
     int order_skip = 0;
 
@@ -112,18 +136,18 @@ class ProfileController extends GetxController {
         order_dateFrom, order_dateTo, order_status, order_take, order_skip);
     order_ready_info = get_order_result.obs;
 
-    getOrderCompletedInfo();
+    //getOrderCompletedInfo();
   }
 
   getOrderCompletedInfo() async {
     loading.showLoading();
     final box = GetStorage();
-
+    DateTime dnow = new DateTime.now();
     String acces_token = box.read("accessToken");
     String? merchant_id = merchant_info.value.merchantId;
     String order_dateFrom = '2021-01-01';
-    String order_dateTo = '2021-12-31';
-    String order_status = 'Completed';
+    String order_dateTo = DateFormat('yyyy-MM-dd').format(dnow);
+    String order_status = 'OAS';
     int order_take = 6;
     int order_skip = 0;
 

@@ -47,3 +47,15 @@ Widget emailError() {
             )),
       ]));
 }
+
+Widget appLaunch() {
+  return RichText(
+      textAlign: TextAlign.start,
+      text: TextSpan(children: [
+        TextSpan(
+            text: 'We will open the app for you. ',
+            style: TextStyle(
+              color: Colors.black,
+            )),
+      ]));
+}

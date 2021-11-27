@@ -6,6 +6,7 @@ import 'package:merchant/controller/email_controller.dart';
 import 'package:merchant/controller/profile_controller.dart';
 import 'package:merchant/utils/custom_dialog.dart';
 import 'package:merchant/utils/email_sent.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AccountView extends StatefulWidget {
   @override
@@ -69,37 +70,39 @@ class AccountViewState extends State<AccountView> {
       color: Colors.white,
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 65,
-            height: 65,
-            decoration:
-                BoxDecoration(shape: BoxShape.circle, color: Color(0xffEFEFF4)),
-            child: Center(
-              child: Icon(
-                FeatherIcons.user,
-                size: 35,
+      child: Obx(() => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 65,
+                height: 65,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle, color: Color(0xffEFEFF4)),
+                child: Center(
+                  child: Icon(
+                    FeatherIcons.user,
+                    size: 35,
+                  ),
+                ),
               ),
-            ),
-          ),
-          Text(
-            "${profile.merchant_info.value.firstName} " +
-                " ${profile.merchant_info.value.lastName}",
-            style: TextStyle(
-                color: Colors.black, fontSize: 18, fontWeight: FontWeight.w600),
-          ),
-          Text(
-            '${profile.merchant_info.value.email}',
-            style: TextStyle(color: Colors.black, fontSize: 14),
-          ),
-          Text(
-            '${profile.merchant_info.value.mobileNumber}',
-            style: TextStyle(color: Colors.black, fontSize: 14),
-          ),
-        ],
-      ),
+              Text(
+                "${profile.merchant_info.value.firstName} " +
+                    " ${profile.merchant_info.value.lastName}",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600),
+              ),
+              Text(
+                '${profile.merchant_info.value.email}',
+                style: TextStyle(color: Colors.black, fontSize: 14),
+              ),
+              Text(
+                '${profile.merchant_info.value.mobileNumber}',
+                style: TextStyle(color: Colors.black, fontSize: 14),
+              ),
+            ],
+          )),
     );
   }
 
@@ -135,11 +138,12 @@ class AccountViewState extends State<AccountView> {
                           return CustomDialog(
                             enableCloseButton: true,
                             closeButtonText: "OK",
-                            title: "Message",
+                            title: "Passafood says",
                             onPressedAgreeButton: () {},
-                            content: emailSent(),
+                            content: appLaunch(),
                             onPressedCloseButton: () {
-                              doemail();
+                              // doemail();
+                              launchURL('https://passafood.co');
                               Navigator.of(context, rootNavigator: true).pop();
                             },
                           );
@@ -267,6 +271,15 @@ class AccountViewState extends State<AccountView> {
               },
             );
           });
+    }
+  }
+
+  void launchURL(String urlLinkAdd) async {
+    print(urlLinkAdd);
+    if (!await canLaunch(urlLinkAdd)) {
+      await launch(urlLinkAdd);
+    } else {
+      throw 'Could not launch $urlLinkAdd';
     }
   }
 }

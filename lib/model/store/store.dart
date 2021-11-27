@@ -30,8 +30,8 @@ class MerchantStoreInfo {
     this.zipCode,
     this.landMark,
     this.imagePath,
-    this.latitude,
-    this.longitude,
+    //  this.latitude,
+    //  this.longitude,
     this.status,
   });
 
@@ -53,8 +53,8 @@ class MerchantStoreInfo {
   String? zipCode;
   String? landMark;
   dynamic imagePath;
-  int? latitude;
-  int? longitude;
+  //double? latitude = 0;
+  // double? longitude = 0;
   String? status;
 
   factory MerchantStoreInfo.fromJson(Map<String, dynamic> json) =>
@@ -82,8 +82,8 @@ class MerchantStoreInfo {
         zipCode: json["zipCode"] == null ? null : json["zipCode"],
         landMark: json["landMark"] == null ? null : json["landMark"],
         imagePath: json["imagePath"],
-        latitude: json["latitude"] == null ? null : json["latitude"],
-        longitude: json["longitude"] == null ? null : json["longitude"],
+        // latitude: json["latitude"] == null ? null : json["latitude"],
+        // longitude: json["longitude"] == null ? null : json["longitude"],
         status: json["status"] == null ? null : json["status"],
       );
 
@@ -108,8 +108,8 @@ class MerchantStoreInfo {
         "zipCode": zipCode == null ? null : zipCode,
         "landMark": landMark == null ? null : landMark,
         "imagePath": imagePath,
-        "latitude": latitude == null ? null : latitude,
-        "longitude": longitude == null ? null : longitude,
+        // "latitude": latitude == null ? null : latitude,
+        // "longitude": longitude == null ? null : longitude,
         "status": status == null ? null : status,
       };
 }

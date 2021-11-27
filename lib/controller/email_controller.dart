@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:merchant/model/email/email_response.dart';
 import 'package:merchant/repository/email_repo.dart';
 import 'package:merchant/repository/email_repo_imp.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EmailController extends GetxController {
   ProfileController profile = Get.find<ProfileController>();

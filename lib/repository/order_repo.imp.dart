@@ -43,7 +43,7 @@ class OrderRepositoryImplementation implements OrderRepository {
           InitResponseParser.fromJson(json.decode(res));
       if (init_parsed.resultEnum == "Success") {
         var jsonResponse = json.decode(res);
-        parsed_response = OrderDetails.fromJson(jsonResponse["resultObject"]);
+        parsed_response = OrderDetails.fromJson(jsonDecode(res));
       } else {
         parsed_response = new OrderDetails();
       }

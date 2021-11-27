@@ -1,4 +1,4 @@
-import 'package:date_picker_timeline/date_picker_timeline.dart';
+//import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:merchant/earnings/views/earnings_order_detail.dart';
@@ -9,7 +9,7 @@ class EarningsHistoryView extends StatefulWidget {
 }
 
 class EarningsHistoryViewState extends State<EarningsHistoryView> {
-  DatePickerController _controller = DatePickerController();
+  // DatePickerController _controller = DatePickerController();
   bool noOrder = false;
 
   @override
@@ -46,7 +46,7 @@ class EarningsHistoryViewState extends State<EarningsHistoryView> {
             ],
           ),
         ),
-        _datePicker(),
+        //_datePicker(),
         SizedBox(
           height: 16,
           // width: MediaQuery.of(context).size.width,
@@ -102,24 +102,24 @@ class EarningsHistoryViewState extends State<EarningsHistoryView> {
     );
   }
 
-  Widget _datePicker() {
-    return Container(
-      height: 98,
-      color: Colors.white,
-      child: DatePicker(
-        DateTime.now().subtract(Duration(days: 30)),
-        controller: _controller,
-        initialSelectedDate: DateTime.now(),
-        inactiveDates: [DateTime.now().add(Duration(days: 30))],
-        selectionColor: Color(0xffFFDE00),
-        selectedTextColor: Colors.black,
-        onDateChange: (date) {
-          // New date selected
-          setState(() {});
-        },
-      ),
-    );
-  }
+  // Widget _datePicker() {
+  //   return Container(
+  //     height: 98,
+  //     color: Colors.white,
+  //     child: DatePicker(
+  //       DateTime.now().subtract(Duration(days: 30)),
+  //       //controller: _controller,
+  //       initialSelectedDate: DateTime.now(),
+  //       inactiveDates: [DateTime.now().add(Duration(days: 30))],
+  //       selectionColor: Color(0xffFFDE00),
+  //       selectedTextColor: Colors.black,
+  //       onDateChange: (date) {
+  //         // New date selected
+  //         setState(() {});
+  //       },
+  //     ),
+  //   );
+  // }
 
   Widget _orderList() {
     return Expanded(

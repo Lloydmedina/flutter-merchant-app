@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_statements
+// ignore_for_file: unnecessary_statements, unrelated_type_equality_checks
 
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +20,7 @@ class DashboardView extends StatefulWidget {
 }
 
 enum WidgetMarker {
+  btn_datasOrder,
   btn_incommingOrders,
   btn_ordersInProgess,
   btn_orderReady,
@@ -28,7 +29,7 @@ enum WidgetMarker {
 
 class DashboardViewState extends State<DashboardView>
     with SingleTickerProviderStateMixin<DashboardView> {
-  WidgetMarker selectedWidgetMarker = WidgetMarker.btn_incommingOrders;
+  WidgetMarker selectedWidgetMarker = WidgetMarker.btn_datasOrder;
   bool resume = false;
   bool paused = true;
   bool closed = false;
@@ -42,12 +43,14 @@ class DashboardViewState extends State<DashboardView>
     _controller =
         AnimationController(vsync: this, duration: Duration(milliseconds: 200));
     _animation = Tween(begin: 0.0, end: 0.3).animate(_controller);
+    profile.order_info();
   }
 
   @override
   void dispose() {
-    super.dispose();
     _controller.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -87,6 +90,7 @@ class DashboardViewState extends State<DashboardView>
                               (selectedtab == 1) ? Colors.blue : Colors.grey),
                     ),
                     onPressed: () {
+                      profile.getIncommingOrderInfo();
                       print("incomming order");
                       setState(() {
                         selectedWidgetMarker = WidgetMarker.btn_incommingOrders;
@@ -109,6 +113,7 @@ class DashboardViewState extends State<DashboardView>
                               (selectedtab == 2) ? Colors.blue : Colors.grey),
                     ),
                     onPressed: () {
+                      profile.getOrderInProgressInfo();
                       print("orders in progress");
                       setState(() {
                         selectedWidgetMarker = WidgetMarker.btn_ordersInProgess;
@@ -139,6 +144,7 @@ class DashboardViewState extends State<DashboardView>
                               (selectedtab == 3) ? Colors.blue : Colors.grey),
                     ),
                     onPressed: () {
+                      profile.getOrderInReadyInfo();
                       print("order ready");
                       setState(() {
                         selectedWidgetMarker = WidgetMarker.btn_orderReady;
@@ -162,6 +168,7 @@ class DashboardViewState extends State<DashboardView>
                               (selectedtab == 4) ? Colors.blue : Colors.grey),
                     ),
                     onPressed: () {
+                      profile.getOrderCompletedInfo();
                       print("orders completed");
                       setState(() {
                         selectedWidgetMarker = WidgetMarker.btn_orderComplete;
@@ -188,8 +195,14 @@ class DashboardViewState extends State<DashboardView>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Container(
+                      child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        selectedWidgetMarker = WidgetMarker.btn_datasOrder;
+                      });
+                    },
                     child: Text("Recent Activity"),
-                  ),
+                  )),
                   Container(
                     child: InkWell(
                       child: Text("See All"),
@@ -266,7 +279,9 @@ class DashboardViewState extends State<DashboardView>
                 ),
                 onPressed: () {
                   print("orders in progress");
-                  selectedWidgetMarker = WidgetMarker.btn_ordersInProgess;
+                  setState(() {
+                    selectedWidgetMarker = WidgetMarker.btn_ordersInProgess;
+                  });
                 },
                 child: Column(
                   children: [
@@ -288,7 +303,9 @@ class DashboardViewState extends State<DashboardView>
                 ),
                 onPressed: () {
                   print("order ready");
-                  selectedWidgetMarker = WidgetMarker.btn_orderReady;
+                  setState(() {
+                    selectedWidgetMarker = WidgetMarker.btn_orderReady;
+                  });
                 },
                 child: Column(
                   children: [
@@ -306,7 +323,9 @@ class DashboardViewState extends State<DashboardView>
                 ),
                 onPressed: () {
                   print("orders completed");
-                  selectedWidgetMarker = WidgetMarker.btn_orderComplete;
+                  setState(() {
+                    selectedWidgetMarker = WidgetMarker.btn_orderComplete;
+                  });
                 },
                 child: Column(
                   children: [
@@ -404,6 +423,8 @@ class DashboardViewState extends State<DashboardView>
 
   Widget widgetLoader() {
     switch (selectedWidgetMarker) {
+      case WidgetMarker.btn_datasOrder:
+        return _ordersData();
       case WidgetMarker.btn_incommingOrders:
         return _incommingOrders();
       case WidgetMarker.btn_ordersInProgess:
@@ -416,9 +437,120 @@ class DashboardViewState extends State<DashboardView>
     return widgetLoader();
   }
 
-  Widget _incommingOrders() {
+  Widget _ordersData() {
     var res;
     if (profile.order_info.value.resultObject == null) {
+      res = Container(
+          child: ListView.separated(
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return Container(
+                  child: Column(
+                    children: [
+                      Text("No activities ."),
+                    ],
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return Divider();
+              },
+              itemCount: 1));
+    } else {
+      res = SingleChildScrollView(
+          child: Container(
+        child: Obx(() => ListView.separated(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return Card(
+                elevation: 2,
+                margin: EdgeInsets.all(0),
+                child: ListTile(
+                  onLongPress: () {
+                    profile.selected = index;
+                  },
+                  // leading:
+                  title: Text(
+                      "${profile.order_info.value.resultObject![index].referenceNo}",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black)),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          profile.order_info.value.resultObject![index]
+                                      .riderName ==
+                                  "null"
+                              ? "Rider: " +
+                                  "${profile.order_info.value.resultObject![index].riderName}"
+                              : "No rider assigned.",
+                          style: TextStyle(color: Colors.black)),
+                      Text(
+                          "Order From: " +
+                              "${profile.order_info.value.resultObject![index].clientName}",
+                          style: TextStyle(color: Colors.black)),
+                      RichText(
+                          text: TextSpan(
+                        children: [
+                          TextSpan(
+                              text: profile
+                                          .order_info
+                                          .value
+                                          .resultObject![index]
+                                          .items![index]
+                                          .qunatity !=
+                                      "0"
+                                  ? "Items " + "0"
+                                  : "Items " +
+                                      "${profile.order_info.value.resultObject![index].items![index].qunatity}",
+                              style: TextStyle(color: Colors.black54)),
+                          TextSpan(
+                              text:
+                                  "${profile.order_info.value.resultObject![index].items![index].qunatity}")
+                        ],
+                      ))
+                    ],
+                  ),
+
+                  trailing: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                          "${profile.order_info.value.resultObject![index].status}"),
+                      Text(
+                          "₱" +
+                              "${profile.order_info.value.resultObject![index].items![index].price}",
+                          style: TextStyle(
+                            fontFamily: 'Roboto',
+                          )),
+                      Text(
+                        "${profile.order_info.value.resultObject![index].date}" +
+                            ", " +
+                            "${profile.order_info.value.resultObject![index].time}",
+                        softWrap: true,
+                      )
+                    ],
+                  ),
+                ),
+              );
+            },
+            separatorBuilder: (context, index) {
+              return Divider();
+            },
+            itemCount: profile.order_info.value.resultObject == null
+                ? 1
+                : profile.order_info.value.resultObject!.length > 5
+                    ? 5
+                    : profile.order_info.value.resultObject!.length)),
+      ));
+    }
+    return res;
+  }
+
+  Widget _incommingOrders() {
+    var res;
+    if (profile.order_incomming.value.resultObject == null) {
       res = Container(
           child: ListView.separated(
               shrinkWrap: true,
@@ -442,19 +574,75 @@ class DashboardViewState extends State<DashboardView>
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
-              return Container(
-                child: Column(
-                  children: [
-                    Text(profile.order_info.value.resultObject == null
-                        ? "Data Not Found "
-                        : "${profile.order_info.value.resultObject![index].id}"),
-                    Text(profile.order_info.value.resultObject == null
-                        ? "Data Not Found "
-                        : "${profile.order_info.value.resultObject![index].clientName}"),
-                    Text(profile.order_info.value.resultObject == null
-                        ? "Data Not Found "
-                        : "${profile.order_info.value.resultObject![index].merchantName}")
-                  ],
+              return Card(
+                elevation: 2,
+                margin: EdgeInsets.all(0),
+                child: ListTile(
+                  onLongPress: () {
+                    profile.selected = index;
+                  },
+                  // leading:
+                  title: Text(
+                      "${profile.order_incomming.value.resultObject![index].referenceNo}",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black)),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          profile.order_incomming.value.resultObject![index]
+                                      .riderName ==
+                                  "null"
+                              ? "Rider: " +
+                                  "${profile.order_incomming.value.resultObject![index].riderName}"
+                              : "No rider assigned.",
+                          style: TextStyle(color: Colors.black)),
+                      Text(
+                          "Order From: " +
+                              "${profile.order_incomming.value.resultObject![index].clientName}",
+                          style: TextStyle(color: Colors.black)),
+                      RichText(
+                          text: TextSpan(
+                        children: [
+                          TextSpan(
+                              text: profile
+                                          .order_incomming
+                                          .value
+                                          .resultObject![index]
+                                          .items![index]
+                                          .qunatity !=
+                                      "0"
+                                  ? "Items " + "0"
+                                  : "Items " +
+                                      "${profile.order_incomming.value.resultObject![index].items![index].qunatity}",
+                              style: TextStyle(color: Colors.black54)),
+                          TextSpan(
+                              text:
+                                  "${profile.order_incomming.value.resultObject![index].items![index].qunatity}")
+                        ],
+                      ))
+                    ],
+                  ),
+
+                  trailing: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                          "${profile.order_incomming.value.resultObject![index].status}"),
+                      Text(
+                          "₱" +
+                              "${profile.order_incomming.value.resultObject![index].items![index].price}",
+                          style: TextStyle(
+                            fontFamily: 'Roboto',
+                          )),
+                      Text(
+                        "${profile.order_incomming.value.resultObject![index].date}" +
+                            ", " +
+                            "${profile.order_incomming.value.resultObject![index].time}",
+                        softWrap: true,
+                      )
+                    ],
+                  ),
                 ),
               );
             },
@@ -463,8 +651,8 @@ class DashboardViewState extends State<DashboardView>
             },
             itemCount: profile.order_info.value.resultObject == null
                 ? 1
-                : profile.order_info.value.resultObject!.length > 5
-                    ? 5
+                : profile.order_info.value.resultObject!.length > 50
+                    ? 50
                     : profile.order_info.value.resultObject!.length)),
       ));
     }
@@ -473,7 +661,7 @@ class DashboardViewState extends State<DashboardView>
 
   Widget _inProgressOrders() {
     var res;
-    if (profile.order_info.value.resultObject == null) {
+    if (profile.order_in_progress_info.value.resultObject == null) {
       res = Container(
           child: ListView.separated(
               shrinkWrap: true,
@@ -497,22 +685,75 @@ class DashboardViewState extends State<DashboardView>
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
-              return Container(
-                child: Column(
-                  children: [
-                    Text(profile.order_in_progress_info.value.resultObject ==
-                            null
-                        ? "Data Not Found "
-                        : "${profile.order_in_progress_info.value.resultObject![index].id}"),
-                    Text(profile.order_in_progress_info.value.resultObject ==
-                            null
-                        ? "Data Not Found "
-                        : "${profile.order_in_progress_info.value.resultObject![index].clientName}"),
-                    Text(profile.order_in_progress_info.value.resultObject ==
-                            null
-                        ? "Data Not Found "
-                        : "${profile.order_in_progress_info.value.resultObject![index].merchantName}")
-                  ],
+              return Card(
+                elevation: 2,
+                margin: EdgeInsets.all(0),
+                child: ListTile(
+                  onLongPress: () {
+                    profile.selected = index;
+                  },
+                  // leading:
+                  title: Text(
+                      "${profile.order_in_progress_info.value.resultObject![index].referenceNo}",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black)),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          profile.order_in_progress_info.value
+                                      .resultObject![index].riderName ==
+                                  "null"
+                              ? "Rider: " +
+                                  "${profile.order_in_progress_info.value.resultObject![index].riderName}"
+                              : "No rider assigned.",
+                          style: TextStyle(color: Colors.black)),
+                      Text(
+                          "Order From: " +
+                              "${profile.order_in_progress_info.value.resultObject![index].clientName}",
+                          style: TextStyle(color: Colors.black)),
+                      RichText(
+                          text: TextSpan(
+                        children: [
+                          TextSpan(
+                              text: profile
+                                          .order_in_progress_info
+                                          .value
+                                          .resultObject![index]
+                                          .items![index]
+                                          .qunatity !=
+                                      "0"
+                                  ? "Items " + "0"
+                                  : "Items " +
+                                      "${profile.order_in_progress_info.value.resultObject![index].items![index].qunatity}",
+                              style: TextStyle(color: Colors.black54)),
+                          TextSpan(
+                              text:
+                                  "${profile.order_in_progress_info.value.resultObject![index].items![index].qunatity}")
+                        ],
+                      ))
+                    ],
+                  ),
+
+                  trailing: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                          "${profile.order_in_progress_info.value.resultObject![index].status}"),
+                      Text(
+                          "₱" +
+                              "${profile.order_in_progress_info.value.resultObject![index].items![index].price}",
+                          style: TextStyle(
+                            fontFamily: 'Roboto',
+                          )),
+                      Text(
+                        "${profile.order_in_progress_info.value.resultObject![index].date}" +
+                            ", " +
+                            "${profile.order_in_progress_info.value.resultObject![index].time}",
+                        softWrap: true,
+                      )
+                    ],
+                  ),
                 ),
               );
             },
@@ -521,8 +762,8 @@ class DashboardViewState extends State<DashboardView>
             },
             itemCount: profile.order_in_progress_info.value.resultObject == null
                 ? 1
-                : profile.order_in_progress_info.value.resultObject!.length > 5
-                    ? 5
+                : profile.order_in_progress_info.value.resultObject!.length > 50
+                    ? 50
                     : profile
                         .order_in_progress_info.value.resultObject!.length)),
       ));
@@ -532,7 +773,7 @@ class DashboardViewState extends State<DashboardView>
 
   Widget _readyOrders() {
     var res;
-    if (profile.order_info.value.resultObject == null) {
+    if (profile.order_ready_info.value.resultObject == null) {
       res = Container(
           child: ListView.separated(
               shrinkWrap: true,
@@ -556,19 +797,75 @@ class DashboardViewState extends State<DashboardView>
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
-              return Container(
-                child: Column(
-                  children: [
-                    Text(profile.order_ready_info.value.resultObject == null
-                        ? "Data Not Found "
-                        : "${profile.order_ready_info.value.resultObject![index].id}"),
-                    Text(profile.order_ready_info.value.resultObject == null
-                        ? "Data Not Found "
-                        : "${profile.order_ready_info.value.resultObject![index].clientName}"),
-                    Text(profile.order_ready_info.value.resultObject == null
-                        ? "Data Not Found "
-                        : "${profile.order_ready_info.value.resultObject![index].merchantName}")
-                  ],
+              return Card(
+                elevation: 2,
+                margin: EdgeInsets.all(0),
+                child: ListTile(
+                  onLongPress: () {
+                    profile.selected = index;
+                  },
+                  // leading:
+                  title: Text(
+                      "${profile.order_ready_info.value.resultObject![index].referenceNo}",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black)),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          profile.order_ready_info.value.resultObject![index]
+                                      .riderName ==
+                                  "null"
+                              ? "Rider: " +
+                                  "${profile.order_ready_info.value.resultObject![index].riderName}"
+                              : "No rider assigned.",
+                          style: TextStyle(color: Colors.black)),
+                      Text(
+                          "Order From: " +
+                              "${profile.order_ready_info.value.resultObject![index].clientName}",
+                          style: TextStyle(color: Colors.black)),
+                      RichText(
+                          text: TextSpan(
+                        children: [
+                          TextSpan(
+                              text: profile
+                                          .order_ready_info
+                                          .value
+                                          .resultObject![index]
+                                          .items![index]
+                                          .qunatity !=
+                                      "0"
+                                  ? "Items " + "0"
+                                  : "Items " +
+                                      "${profile.order_ready_info.value.resultObject![index].items![index].qunatity}",
+                              style: TextStyle(color: Colors.black54)),
+                          TextSpan(
+                              text:
+                                  "${profile.order_ready_info.value.resultObject![index].items![index].qunatity}")
+                        ],
+                      ))
+                    ],
+                  ),
+
+                  trailing: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                          "${profile.order_ready_info.value.resultObject![index].status}"),
+                      Text(
+                          "₱" +
+                              "${profile.order_ready_info.value.resultObject![index].items![index].price}",
+                          style: TextStyle(
+                            fontFamily: 'Roboto',
+                          )),
+                      Text(
+                        "${profile.order_ready_info.value.resultObject![index].date}" +
+                            ", " +
+                            "${profile.order_ready_info.value.resultObject![index].time}",
+                        softWrap: true,
+                      )
+                    ],
+                  ),
                 ),
               );
             },
@@ -577,8 +874,8 @@ class DashboardViewState extends State<DashboardView>
             },
             itemCount: profile.order_ready_info.value.resultObject == null
                 ? 1
-                : profile.order_ready_info.value.resultObject!.length > 5
-                    ? 5
+                : profile.order_ready_info.value.resultObject!.length > 50
+                    ? 50
                     : profile.order_ready_info.value.resultObject!.length)),
       ));
     }
@@ -587,7 +884,7 @@ class DashboardViewState extends State<DashboardView>
 
   Widget _completeOrders() {
     var res;
-    if (profile.order_info.value.resultObject == null) {
+    if (profile.order_completed_info.value.resultObject == null) {
       res = Container(
           child: ListView.separated(
               shrinkWrap: true,
@@ -611,19 +908,75 @@ class DashboardViewState extends State<DashboardView>
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
-              return Container(
-                child: Column(
-                  children: [
-                    Text(profile.order_completed_info.value.resultObject == null
-                        ? "Data Not Found "
-                        : "${profile.order_completed_info.value.resultObject![index].id}"),
-                    Text(profile.order_completed_info.value.resultObject == null
-                        ? "Data Not Found "
-                        : "${profile.order_completed_info.value.resultObject![index].clientName}"),
-                    Text(profile.order_completed_info.value.resultObject == null
-                        ? "Data Not Found "
-                        : "${profile.order_completed_info.value.resultObject![index].merchantName}")
-                  ],
+              return Card(
+                elevation: 2,
+                margin: EdgeInsets.all(0),
+                child: ListTile(
+                  onLongPress: () {
+                    profile.selected = index;
+                  },
+                  // leading:
+                  title: Text(
+                      "${profile.order_completed_info.value.resultObject![index].referenceNo}",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black)),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          profile.order_completed_info.value
+                                      .resultObject![index].riderName ==
+                                  "null"
+                              ? "Rider: " +
+                                  "${profile.order_completed_info.value.resultObject![index].riderName}"
+                              : "No rider assigned.",
+                          style: TextStyle(color: Colors.black)),
+                      Text(
+                          "Order From: " +
+                              "${profile.order_completed_info.value.resultObject![index].clientName}",
+                          style: TextStyle(color: Colors.black)),
+                      RichText(
+                          text: TextSpan(
+                        children: [
+                          TextSpan(
+                              text: profile
+                                          .order_completed_info
+                                          .value
+                                          .resultObject![index]
+                                          .items![index]
+                                          .qunatity !=
+                                      "0"
+                                  ? "Items " + "0"
+                                  : "Items " +
+                                      "${profile.order_completed_info.value.resultObject![index].items![index].qunatity}",
+                              style: TextStyle(color: Colors.black54)),
+                          TextSpan(
+                              text:
+                                  "${profile.order_completed_info.value.resultObject![index].items![index].qunatity}")
+                        ],
+                      ))
+                    ],
+                  ),
+
+                  trailing: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                          "${profile.order_completed_info.value.resultObject![index].status}"),
+                      Text(
+                          "₱" +
+                              "${profile.order_completed_info.value.resultObject![index].items![index].price}",
+                          style: TextStyle(
+                            fontFamily: 'Roboto',
+                          )),
+                      Text(
+                        "${profile.order_completed_info.value.resultObject![index].date}" +
+                            ", " +
+                            "${profile.order_completed_info.value.resultObject![index].time}",
+                        softWrap: true,
+                      )
+                    ],
+                  ),
                 ),
               );
             },
@@ -632,8 +985,8 @@ class DashboardViewState extends State<DashboardView>
             },
             itemCount: profile.order_completed_info.value.resultObject == null
                 ? 1
-                : profile.order_completed_info.value.resultObject!.length > 5
-                    ? 5
+                : profile.order_completed_info.value.resultObject!.length > 50
+                    ? 50
                     : profile.order_completed_info.value.resultObject!.length)),
       ));
     }

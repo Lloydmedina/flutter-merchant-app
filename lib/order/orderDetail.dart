@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'dart:ffi';
+
 OrderDetails orderDetailsFromJson(String str) =>
     OrderDetails.fromJson(json.decode(str));
 
@@ -56,8 +58,8 @@ class ResultObject {
     this.time,
     this.starTime,
     this.endTime,
-    this.latitude,
-    this.longitude,
+    //this.latitude,
+    //this.longitude,
     this.duration,
     this.kms,
     this.fees,
@@ -77,49 +79,51 @@ class ResultObject {
     this.status,
     this.items,
     this.detailStatus,
+    this.acceptedMerchant,
   });
 
   int? id;
   String? guid;
   String? referenceNo;
-  DateTime? date;
-  DateTime? time;
+  String? date;
+  String? time;
   DateTime? starTime;
   DateTime? endTime;
-  int? latitude;
-  int? longitude;
-  int? duration;
-  int? kms;
-  int? fees;
+  //Double? latitude;
+  //Double? longitude;
+  double? duration;
+  double? kms;
+  double? fees;
   String? remarks;
   String? merchantGuid;
   String? merchantName;
   String? merchantAddress;
-  String? riderGuid;
-  String? riderName;
-  String? riderContactno;
+  dynamic riderGuid;
+  dynamic riderName;
+  dynamic riderContactno;
   String? clientGuid;
   String? clientName;
   String? clientEmailAddress;
   String? clientContactno;
-  String? clientAddress;
-  String? clientAddressDetail;
+  dynamic clientAddress;
+  dynamic clientAddressDetail;
   String? status;
   List<Item>? items;
   List<DetailStatus>? detailStatus;
+  String? acceptedMerchant;
 
   factory ResultObject.fromJson(Map<String, dynamic> json) => ResultObject(
         id: json["id"] == null ? null : json["id"],
         guid: json["guid"] == null ? null : json["guid"],
         referenceNo: json["referenceNo"] == null ? null : json["referenceNo"],
-        date: json["date"] == null ? null : DateTime.parse(json["date"]),
-        time: json["time"] == null ? null : DateTime.parse(json["time"]),
+        date: json["date"] == null ? null : json["date"],
+        time: json["time"] == null ? null : json["time"],
         starTime:
             json["starTime"] == null ? null : DateTime.parse(json["starTime"]),
         endTime:
             json["endTime"] == null ? null : DateTime.parse(json["endTime"]),
-        latitude: json["latitude"] == null ? null : json["latitude"],
-        longitude: json["longitude"] == null ? null : json["longitude"],
+        //latitude: json["latitude"] == null ? null : json["latitude"],
+        // longitude: json["longitude"] == null ? null : json["longitude"],
         duration: json["duration"] == null ? null : json["duration"],
         kms: json["kms"] == null ? null : json["kms"],
         fees: json["fees"] == null ? null : json["fees"],
@@ -130,10 +134,9 @@ class ResultObject {
             json["merchantName"] == null ? null : json["merchantName"],
         merchantAddress:
             json["merchantAddress"] == null ? null : json["merchantAddress"],
-        riderGuid: json["riderGUID"] == null ? null : json["riderGUID"],
-        riderName: json["riderName"] == null ? null : json["riderName"],
-        riderContactno:
-            json["riderContactno"] == null ? null : json["riderContactno"],
+        riderGuid: json["riderGUID"],
+        riderName: json["riderName"],
+        riderContactno: json["riderContactno"],
         clientGuid: json["clientGUID"] == null ? null : json["clientGUID"],
         clientName: json["clientName"] == null ? null : json["clientName"],
         clientEmailAddress: json["clientEmailAddress"] == null
@@ -141,11 +144,8 @@ class ResultObject {
             : json["clientEmailAddress"],
         clientContactno:
             json["clientContactno"] == null ? null : json["clientContactno"],
-        clientAddress:
-            json["clientAddress"] == null ? null : json["clientAddress"],
-        clientAddressDetail: json["clientAddressDetail"] == null
-            ? null
-            : json["clientAddressDetail"],
+        clientAddress: json["clientAddress"],
+        clientAddressDetail: json["clientAddressDetail"],
         status: json["status"] == null ? null : json["status"],
         items: json["items"] == null
             ? null
@@ -154,20 +154,20 @@ class ResultObject {
             ? null
             : List<DetailStatus>.from(
                 json["detailStatus"].map((x) => DetailStatus.fromJson(x))),
+        acceptedMerchant:
+            json["acceptedMerchant"] == null ? null : json["acceptedMerchant"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id == null ? null : id,
         "guid": guid == null ? null : guid,
         "referenceNo": referenceNo == null ? null : referenceNo,
-        "date": date == null
-            ? null
-            : "${date!.year.toString().padLeft(4, '0')}-${date!.month.toString().padLeft(2, '0')}-${date!.day.toString().padLeft(2, '0')}",
-        "time": time == null ? null : time!.toIso8601String(),
+        "date": date == null ? null : date,
+        "time": time == null ? null : time,
         "starTime": starTime == null ? null : starTime!.toIso8601String(),
         "endTime": endTime == null ? null : endTime!.toIso8601String(),
-        "latitude": latitude == null ? null : latitude,
-        "longitude": longitude == null ? null : longitude,
+        // "latitude": latitude == null ? null : latitude,
+        //"longitude": longitude == null ? null : longitude,
         "duration": duration == null ? null : duration,
         "kms": kms == null ? null : kms,
         "fees": fees == null ? null : fees,
@@ -175,17 +175,16 @@ class ResultObject {
         "merchantGUID": merchantGuid == null ? null : merchantGuid,
         "merchantName": merchantName == null ? null : merchantName,
         "merchantAddress": merchantAddress == null ? null : merchantAddress,
-        "riderGUID": riderGuid == null ? null : riderGuid,
-        "riderName": riderName == null ? null : riderName,
-        "riderContactno": riderContactno == null ? null : riderContactno,
+        "riderGUID": riderGuid,
+        "riderName": riderName,
+        "riderContactno": riderContactno,
         "clientGUID": clientGuid == null ? null : clientGuid,
         "clientName": clientName == null ? null : clientName,
         "clientEmailAddress":
             clientEmailAddress == null ? null : clientEmailAddress,
         "clientContactno": clientContactno == null ? null : clientContactno,
-        "clientAddress": clientAddress == null ? null : clientAddress,
-        "clientAddressDetail":
-            clientAddressDetail == null ? null : clientAddressDetail,
+        "clientAddress": clientAddress,
+        "clientAddressDetail": clientAddressDetail,
         "status": status == null ? null : status,
         "items": items == null
             ? null
@@ -193,6 +192,7 @@ class ResultObject {
         "detailStatus": detailStatus == null
             ? null
             : List<dynamic>.from(detailStatus!.map((x) => x.toJson())),
+        "acceptedMerchant": acceptedMerchant == null ? null : acceptedMerchant,
       };
 }
 
@@ -201,19 +201,29 @@ class DetailStatus {
     this.bookingId,
     this.statusId,
     this.statusDescription,
+    this.type,
     this.remarks,
+    this.riderGuid,
+    this.riderName,
+    this.riderContactno,
     this.id,
     this.guid,
     this.dateCreated,
+    this.createdBy,
   });
 
-  int? bookingId;
+  String? bookingId;
   String? statusId;
   String? statusDescription;
+  String? type;
   String? remarks;
+  dynamic riderGuid;
+  dynamic riderName;
+  dynamic riderContactno;
   int? id;
   String? guid;
   DateTime? dateCreated;
+  dynamic createdBy;
 
   factory DetailStatus.fromJson(Map<String, dynamic> json) => DetailStatus(
         bookingId: json["bookingId"] == null ? null : json["bookingId"],
@@ -221,12 +231,17 @@ class DetailStatus {
         statusDescription: json["statusDescription"] == null
             ? null
             : json["statusDescription"],
+        type: json["type"] == null ? null : json["type"],
         remarks: json["remarks"] == null ? null : json["remarks"],
+        riderGuid: json["riderGUID"],
+        riderName: json["riderName"],
+        riderContactno: json["riderContactno"],
         id: json["id"] == null ? null : json["id"],
         guid: json["guid"] == null ? null : json["guid"],
         dateCreated: json["dateCreated"] == null
             ? null
             : DateTime.parse(json["dateCreated"]),
+        createdBy: json["createdBy"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -234,11 +249,16 @@ class DetailStatus {
         "statusId": statusId == null ? null : statusId,
         "statusDescription":
             statusDescription == null ? null : statusDescription,
+        "type": type == null ? null : type,
         "remarks": remarks == null ? null : remarks,
+        "riderGUID": riderGuid,
+        "riderName": riderName,
+        "riderContactno": riderContactno,
         "id": id == null ? null : id,
         "guid": guid == null ? null : guid,
         "dateCreated":
             dateCreated == null ? null : dateCreated!.toIso8601String(),
+        "createdBy": createdBy,
       };
 }
 
@@ -256,10 +276,10 @@ class Item {
 
   String? itemGuid;
   String? itemDescription;
-  dynamic? uoM;
-  int? price;
-  int? qunatity;
-  int? totalAmount;
+  dynamic uoM;
+  double? price;
+  double? qunatity;
+  double? totalAmount;
   String? remarks;
   List<dynamic>? itemDetails;
 
