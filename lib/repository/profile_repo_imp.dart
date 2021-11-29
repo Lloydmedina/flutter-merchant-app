@@ -16,7 +16,7 @@ class ProfileRepositoryImplementation implements ProfileRepository {
   final String ACCOUNT_BASE_URL = API_CONFIG.ACCOUNT_BASE_URL;
   final headers = API_CONFIG.HEADERS;
   final merchant_user_storage = GetStorage('merchant_user_info');
-  var client = http.Client();
+
   final logger = Logger();
 
   ProfileRepositoryImplementation() {}
@@ -25,7 +25,7 @@ class ProfileRepositoryImplementation implements ProfileRepository {
   Future<MerchantProfile> getMerchantInfo(
       String? userid, String? access_token) async {
     try {
-      client = http.Client();
+      var client = http.Client();
       final url =
           Uri.parse('${ACCOUNT_BASE_URL}/api/v1/merchant/user/${userid}');
       final response = await client.get(url, headers: {

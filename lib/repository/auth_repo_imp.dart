@@ -19,15 +19,14 @@ class AuthRepositoryImplementation extends AuthRepository {
   final headers = API_CONFIG.HEADERS;
 
   late SharedPreferences prefs;
-  var client = http.Client();
-  var merchUserClient = http.Client();
+
   final logger = Logger();
 
   AuthRepositoryImplementation() {}
   @override
   Future<CheckEmailResponse>? checkEmailMobile(String email_mobile) async {
     try {
-      client = http.Client();
+      var client = http.Client();
       final url = Uri.parse(
           '${ACCOUNT_BASE_URL}/api/v1/m-verify-account/${email_mobile}');
 
@@ -79,11 +78,11 @@ class AuthRepositoryImplementation extends AuthRepository {
   @override
   Future<SignInResponse>? signIn(data) async {
     try {
-      merchUserClient = http.Client();
+      var client = http.Client();
+
       final url = Uri.parse('${ACCOUNT_BASE_URL}/api/v1/merchant/user/login');
       final body = jsonEncode(data);
-      final response =
-          await merchUserClient.post(url, headers: headers, body: body);
+      final response = await client.post(url, headers: headers, body: body);
       final res = response.body;
 
       client.close();

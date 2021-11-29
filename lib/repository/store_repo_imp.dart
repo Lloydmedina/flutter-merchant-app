@@ -17,7 +17,7 @@ class StoreRepositoryImplementation implements StoreRepository {
   final String ACCOUNT_BASE_URL = API_CONFIG.ACCOUNT_BASE_URL;
   final headers = API_CONFIG.HEADERS;
   final merchant_store_storage = GetStorage('merchant_store_info');
-  var client = http.Client();
+
   final logger = Logger();
 
   StoreRepositoryImplementation() {}
@@ -26,7 +26,7 @@ class StoreRepositoryImplementation implements StoreRepository {
   Future<MerchantStoreInfo> getMerchantStoreInfo(
       String? merchantId, String? access_token) async {
     try {
-      client = http.Client();
+      var client = http.Client();
       final url =
           Uri.parse('${ACCOUNT_BASE_URL}/api/v1/merchant/store/${merchantId}');
       final response = await client.get(url, headers: {

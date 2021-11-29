@@ -14,7 +14,7 @@ class OrderRepositoryImplementation implements OrderRepository {
   final orderBaseUrl = 'https://booking-service-staging.azurewebsites.net';
   final headers = API_CONFIG.HEADERS;
   final merchant_order_storage = GetStorage('merchant_order_info');
-  var client = http.Client();
+
   final logger = Logger();
 
   OrderRepositoryImplementation() {}
@@ -28,13 +28,14 @@ class OrderRepositoryImplementation implements OrderRepository {
       int order_take,
       int order_skip) async {
     try {
-      client = http.Client();
+      var client = http.Client();
       final url = Uri.parse(
           '${orderBaseUrl}/api/v1/booking/${order_dateFrom}/${order_dateTo}/${order_status}/${order_take}/${order_skip}/${merchant_id}');
       final response = await client.get(url, headers: {
         ...headers,
         'Authorization': 'Bearer ${acces_token}',
       });
+      var mylog = json.decode(response.body);
       final res = response.body;
 
       client.close();
@@ -49,7 +50,7 @@ class OrderRepositoryImplementation implements OrderRepository {
       }
       return parsed_response;
     } on Exception catch (e) {
-      logger.e(e);
+      //logger.e(e);
 
       return new OrderDetails();
     }

@@ -4,8 +4,6 @@
 
 import 'dart:convert';
 
-import 'dart:ffi';
-
 OrderDetails orderDetailsFromJson(String str) =>
     OrderDetails.fromJson(json.decode(str));
 
@@ -268,7 +266,7 @@ class Item {
     this.itemDescription,
     this.uoM,
     this.price,
-    this.qunatity,
+    this.quantiy,
     this.totalAmount,
     this.remarks,
     this.itemDetails,
@@ -278,7 +276,7 @@ class Item {
   String? itemDescription;
   dynamic uoM;
   double? price;
-  double? qunatity;
+  double? quantiy;
   double? totalAmount;
   String? remarks;
   List<dynamic>? itemDetails;
@@ -289,7 +287,7 @@ class Item {
             json["itemDescription"] == null ? null : json["itemDescription"],
         uoM: json["uoM"],
         price: json["price"] == null ? null : json["price"],
-        qunatity: json["qunatity"] == null ? null : json["qunatity"],
+        quantiy: json["qunatity"] == null ? null : json["qunatity"],
         totalAmount: json["totalAmount"] == null ? null : json["totalAmount"],
         remarks: json["remarks"] == null ? null : json["remarks"],
         itemDetails: json["itemDetails"] == null
@@ -302,7 +300,7 @@ class Item {
         "itemDescription": itemDescription == null ? null : itemDescription,
         "uoM": uoM,
         "price": price == null ? null : price,
-        "qunatity": qunatity == null ? null : qunatity,
+        "qunatity": quantiy == null ? null : quantiy,
         "totalAmount": totalAmount == null ? null : totalAmount,
         "remarks": remarks == null ? null : remarks,
         "itemDetails": itemDetails == null
