@@ -50,16 +50,6 @@ class StoreRepositoryImplementation implements StoreRepository {
       }
       return parsed_response;
     } on Exception catch (e) {
-      bool has = merchant_store_storage.hasData('merchant_store');
-      logger.e(has);
-      if (e is SocketException) {
-        if (merchant_store_storage.hasData('merchant_store')) {
-          logger.e('connection lost');
-          Map<String, dynamic> merchant_store_info =
-              merchant_store_storage.read("merchant_store");
-          return MerchantStoreInfo.fromJson(merchant_store_info);
-        }
-      }
       return new MerchantStoreInfo();
     }
   }

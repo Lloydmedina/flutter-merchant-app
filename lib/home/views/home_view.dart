@@ -30,85 +30,29 @@ class HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.white,
+        //iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: Colors.transparent,
+        toolbarHeight: 25,
+        elevation: 0,
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            UserAccountsDrawerHeader(
-              currentAccountPictureSize: const Size.square(50),
-              decoration: BoxDecoration(color: Colors.amber),
-              currentAccountPicture: new CircleAvatar(
-                child: Icon(
-                  FeatherIcons.user,
-                ),
-                backgroundColor: Colors.white,
-              ),
-              accountName: Obx(() {
-                return Text(
-                  "${profile.store_info.value.company}",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 32,
-                      fontWeight: FontWeight.w900,
-                      fontFamily: "Poppins"),
-                );
-              }),
-              accountEmail: Obx(() {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${profile.store_info.value.landMark}",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
-                    Expanded(
-                        child: Text(
-                            "${profile.merchant_info.value.firstName} " +
-                                " ${profile.merchant_info.value.lastName}",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500,
-                                overflow: TextOverflow.ellipsis))),
-                  ],
-                );
-              }),
-            ),
-            ListTile(
-              leading: Icon(FeatherIcons.user),
-              title: Text('Account',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500)),
-              onTap: () {
-                Get.toNamed("/account");
-              },
-            ),
-            ListTile(
-              leading: Icon(FeatherIcons.logOut),
-              title: Text('Sign Out',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500)),
-              onTap: () {
-                doLogout();
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: _drawer(),
       body: Container(
         child: DashboardView(),
       ),
       bottomNavigationBar: _storeAvialability(),
+      floatingActionButton: new Builder(builder: (context) {
+        return new FloatingActionButton(
+          onPressed: () {
+            Scaffold.of(context).openDrawer();
+          },
+          child: new Icon(
+            Icons.menu,
+            color: Colors.black,
+          ),
+          backgroundColor: Colors.white,
+        );
+      }),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
     );
   }
 
@@ -124,6 +68,81 @@ class HomeViewState extends State<HomeView> {
       toolbarHeight: 20,
       backgroundColor: Colors.white,
       automaticallyImplyLeading: false,
+    );
+  }
+
+  Widget _drawer() {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          UserAccountsDrawerHeader(
+            currentAccountPictureSize: const Size.square(50),
+            decoration: BoxDecoration(color: Colors.amber),
+            currentAccountPicture: new CircleAvatar(
+              child: Icon(
+                FeatherIcons.user,
+              ),
+              backgroundColor: Colors.white,
+            ),
+            accountName: Obx(() {
+              return Text(
+                "${profile.store_info.value.company}",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 32,
+                    fontWeight: FontWeight.w900,
+                    fontFamily: "Poppins"),
+              );
+            }),
+            accountEmail: Obx(() {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${profile.store_info.value.landMark}",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Expanded(
+                      child: Text(
+                          "${profile.merchant_info.value.firstName} " +
+                              " ${profile.merchant_info.value.lastName}",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                              overflow: TextOverflow.ellipsis))),
+                ],
+              );
+            }),
+          ),
+          ListTile(
+            leading: Icon(FeatherIcons.user),
+            title: Text('Account',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500)),
+            onTap: () {
+              Get.toNamed("/account");
+            },
+          ),
+          ListTile(
+            leading: Icon(FeatherIcons.logOut),
+            title: Text('Sign Out',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500)),
+            onTap: () {
+              doLogout();
+            },
+          ),
+        ],
+      ),
     );
   }
 

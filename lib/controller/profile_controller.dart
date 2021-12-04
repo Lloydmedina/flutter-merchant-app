@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:merchant/controller/loading_controller.dart';
 import 'package:merchant/controller/store_controller.dart';
+import 'package:merchant/model/order_response.dart';
 
 import 'package:merchant/model/profile/profile.dart';
 import 'package:merchant/model/store/store.dart';
@@ -15,6 +16,7 @@ import 'package:merchant/repository/profile_repo.dart';
 import 'package:merchant/repository/profile_repo_imp.dart';
 import 'package:merchant/repository/store_repo_imp.dart';
 import 'package:merchant/repository/store_repo.dart';
+import 'package:signalr_core/signalr_core.dart';
 
 class ProfileController extends GetxController {
   ProfileRepository profile = Get.find<ProfileRepositoryImplementation>();
@@ -27,11 +29,19 @@ class ProfileController extends GetxController {
   Rx<MerchantProfile> merchant_info = new MerchantProfile().obs;
   Rx<MerchantStoreInfo> store_info = new MerchantStoreInfo().obs;
   OrderDetails order_info = new OrderDetails();
+  //BookingResponse bookings = new BookingResponse();
+  List<BookingResponse>? bookings = [];
 
   int selected = 0;
   final logger = Logger();
+  late HubConnection connection;
+  final orderBaseUrl = 'https://booking-service-staging.azurewebsites.net';
 
   ProfileController() {}
+  @override
+  void onInit() {
+    super.onInit();
+  }
 
   getProfileInfo() async {
     loading.showLoading();
@@ -51,34 +61,37 @@ class ProfileController extends GetxController {
 
     String? acces_token = box.read("accessToken");
     String? merchant_id = merchant_info.value.merchantId;
-
+    box.write('merchantId', merchant_id);
     final get_store_result =
         await store.getMerchantStoreInfo(merchant_id, acces_token);
     store_info = get_store_result.obs;
     loading.hideLoading();
+    setStartDate('2021-11-01');
   }
 
-  setStatus(data) {
+  setStartDate(data) {
     print(data);
     getOrderInfo(data);
   }
 
-  getOrderInfo(status) async {
+  getOrderInfo(startingDate) async {
     loading.showLoading();
     final box = GetStorage();
+
     DateTime dnow = new DateTime.now();
     String acces_token = box.read("accessToken");
     String? merchant_id = merchant_info.value.merchantId;
-    String order_dateFrom = '2021-11-01';
+    String order_dateFrom = startingDate;
     String order_dateTo = DateFormat('yyyy-MM-dd').format(dnow);
-    String order_status = status;
+    String order_status = '0';
     int order_take = 100;
     int order_skip = 0;
 
     final get_order_result = await order.getOrderInfo(merchant_id, acces_token,
         order_dateFrom, order_dateTo, order_status, order_take, order_skip);
     order_info = get_order_result;
-
     update();
   }
+
+  void initSignalr() {}
 }

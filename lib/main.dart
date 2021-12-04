@@ -9,6 +9,8 @@ import 'package:merchant/home/views/home_view.dart';
 import 'package:merchant/login/views/forgot_password_view.dart';
 import 'package:merchant/login/views/login_view.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:merchant/order/views/order_all.dart';
+import 'package:merchant/order/views/order_recent.dart';
 import 'package:merchant/utils/api_config.dart';
 
 Future<void> main() async {
@@ -49,6 +51,8 @@ class _MyAppState extends State<MyApp> {
         GetPage(name: "/home", page: () => HomeView()),
         GetPage(name: "/forgot_password", page: () => ForgotPasswordView()),
         GetPage(name: "/account", page: () => AccountView()),
+        GetPage(name: "/recent_orders", page: () => RecentOrdersView()),
+        GetPage(name: "/all_orders", page: () => AllOrdersView())
       ],
       initialRoute: '/',
     );

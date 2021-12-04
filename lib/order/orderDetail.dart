@@ -267,7 +267,7 @@ class Item {
     this.uoM,
     this.price,
     this.quantiy,
-    this.totalAmount,
+    this.totalAmount = 0.00,
     this.remarks,
     this.itemDetails,
   });
